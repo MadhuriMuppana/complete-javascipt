@@ -248,7 +248,7 @@ console.log(now - 1991 > now - 2019); //true
 //16 CODING CHALLENGE 1
 
 // ---------------------------------------------------------------------------
-// 17 STRINGS AND TEMPLATE LITERALS
+//17 STRINGS AND TEMPLATE LITERALS
 /*
 const firstName = "jonas";
 const job = "teacher";

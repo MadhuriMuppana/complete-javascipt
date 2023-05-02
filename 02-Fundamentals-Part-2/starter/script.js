@@ -10,7 +10,7 @@ to write a secure js code, and we have to do to activate strict mode is to write
 mode will not be activated, comments are aloowed because js will just ignore them but no code
 //we can also activate a strict mode only for a specific fn or a specific block
 
-////the strict mode makes it easier for developers to avoid accidenetal errors, so basically it helps us 
+///the strict mode makes it easier for developers to avoid accidenetal errors, so basically it helps us 
 introduce bugs into our code, that is becaouse of 2 diff scenarios
 
 //1)strict mode forbids us to do certain things and second, it will actually create visible errors to us
