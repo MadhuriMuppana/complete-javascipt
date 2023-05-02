@@ -296,7 +296,6 @@ if (age >= 18) {
 */
 
 //19 CODING CHALLANEGE 2
-
 //---------------------------------------------------------------------------
 //20 TYPE CONVERSION AND COERSION:there is type conversion and type coersion
 /*
