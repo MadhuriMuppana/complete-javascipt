@@ -2,7 +2,7 @@
 //
 
 //-------------------------------------------------------------------------
-//1. HELLO WORLD:
+//7. HELLO WORLD:
 //alert is a js fn
 //alert("hello world");
 //js will gives us a popup window which has hello world
@@ -12,7 +12,7 @@
 // if ((js = "amazing")) alert("javascript is fun");
 
 //---------------------------------------------------------------------------
-// 2.A BRIEF INTRODUCTION TO JAVASCRIPT
+// 8.A BRIEF INTRODUCTION TO JAVASCRIPT
 // Javascript: It is high level object-oriented, multi-paradigm programming language
 
 // PROGRAMMING LANGUAGE: is basically just a tool that allows us to write code that will instruct a computer to
@@ -63,13 +63,13 @@
 // modern js
 
 // --------------------------------------------------------------------------
-// //LINKING A JS FILE
+// //9LINKING A JS FILE
 // we always need a html doc because our js needs to be attached to an html, in html there is a script tag
 // //where we can write js in the head benath the style, we use script tag at the end of the body
 //  <script src="allcode.js"></script>
 
 //---------------------------------------------------------------------------
-//VALUES AND VARIABLES
+//10.VALUES AND VARIABLES
 /*
 
 //VALUE: is a piece of data, it is the most fundamental unit of information that we have in programming
@@ -98,8 +98,9 @@ let PI = 3.14;
 // make sure variable name sare decriptive
 */
 
+//11 PRACTICE ASSIGNMENTS
 // -------------------------------------------------------------------------
-// //DATA TYPE
+// 12DATA TYPE
 /*
 // In every lang values can have diff types, depending on the type of data that we want to hold, we already saw
 // strings and numbers, but there are actually more data types
@@ -178,7 +179,7 @@ console.log(typeof null); //object
 */
 
 // --------------------------------------------------------------------------
-// //LET CONST AND VAR:
+// 13LET CONST AND VAR:
 /*
 // (3 different ways of declaring variables)
 
@@ -207,7 +208,7 @@ const birthYear = 1991;
 */
 
 //---------------------------------------------------------------------------
-//BASIC OPERATORS:
+// 14 BASIC OPERATORS:
 /*
 //OPERATORS:an operator basically allows us to transform values or combine multiple values and really do
 //all kind of work with values, there are many categories of operators mathematical,comparision,logical,
@@ -243,8 +244,11 @@ console.log(now - 1991 > now - 2019); //true
 //COMPARISION OPERATORS: we use these to produce boolean values
 */
 
+//15 OPERATOR PRECEDENCE
+//16 CODING CHALLENGE 1
+
 // ---------------------------------------------------------------------------
-// //STRINGS AND TEMPLATE LITERALS
+// 17 STRINGS AND TEMPLATE LITERALS
 /*
 const firstName = "jonas";
 const job = "teacher";
@@ -270,7 +274,7 @@ multiple strings`);
 */
 
 //---------------------------------------------------------------------------
-//TAKING DECISIONS: IF/ELSE STATEMENTS
+//18 TAKING DECISIONS: IF/ELSE STATEMENTS
 /*
 //program which checks whether a person is allowed to start taking a driving license or not, and if she is
 //then print that to the console, and if not it will print how many years are left until the person can
@@ -291,8 +295,10 @@ if (age >= 18) {
 // should not execute, that gives us a lot more control over how our code work
 */
 
+//19 CODING CHALLANEGE 2
+
 //---------------------------------------------------------------------------
-//TYPE CONVERSION AND COERSION:there is type conversion and type coersion
+//20 TYPE CONVERSION AND COERSION:there is type conversion and type coersion
 /*
 //TYPE CONVERSION: when we manually convert from one type to another, when we explicitly want to convert
 // from one type, lets say we have an input field on a web page for the user to input their birthYear, and these
@@ -337,7 +343,7 @@ console.log(n);
 */
 
 //--------------------------------------------------------------
-//TURTHY AND FALSY VALUES
+//21 TURTHY AND FALSY VALUES
 /*
 //FALSY VALUES:these are not the values that are exactly false, but will become false when we try to convert
 //them into a boolean, there are 5 falsy values
@@ -371,7 +377,7 @@ if (height) {
 */
 
 //---------------------------------------------------------------------------
-//EQUALITY OPERATORS: (==, ===)
+// 22 EQUALITY OPERATORS: (==, ===)
 /*
 const age = 18;
 //creating an if statemnt which will log that the person just became an adult, only if the age is exactly 18
@@ -404,15 +410,53 @@ if (fav !== 23) console.log("why not 23");
 */
 
 //---------------------------------------------------------------------------
-//BOOLEAN LOGIC: is a branch of computer science, which uses true and false values to solve complex logical
+// 23 BOOLEAN LOGIC:
+//is a branch of computer science, which uses true and false values to solve complex logical
 //pblms, inorder ot do that it uses several logical operators to combine true and false
 //LOGICAL OPERATORS: AND, OR, NOT
 //AND: only if both the values are true the result will be true
 //OR:even if one of the value is false the result can still be true, if any one value is true the result is true
 //NOT:if a is true it will return false, and if a is false it returns true
 
+//24 LOGICAL OPERATORS
+//25 CODING CHALLENGE 3
+
 //---------------------------------------------------------------------------
-//STATEMENTS AND EXPRESSIONS:
+//26 SWITCH STATEMENT:
+/*
+//alternativw way of writing if/else statements when all we want to do is to compare one value to mulitple
+//different options, lets say we have a week day variable and for each day there is diff ativity so we gonna
+//map one activity to each day
+const day = "monday";
+//map one activity to each day
+switch (day) {
+  case "monday": //comopare day with strict equality day === 'monday'
+    console.log("plane course structure");
+    console.log("go to coding meet up");
+    break;
+  case "tuesday":
+    console.log("prepare theaory videos");
+    break;
+  case "wednesday":
+  case "thursday":
+    console.log("write code examples");
+    break;
+  case "friday":
+    console.log("record videos");
+    break;
+  case "saturday":
+  case "sunday":
+    console.log("enjoy the weekend");
+    break;
+  default:
+    console.log("not a valid day");
+  //default if all the other cases failed
+}
+//without the break the code simply continues and it stops when there is a break
+*/
+
+//---------------------------------------------------------------------------
+//27 STATEMENTS AND EXPRESSIONS:
 /*
 //EXPRESSION: is a piece of code that produces a value
 //3 + 4 is an expression as it produces a value
@@ -435,7 +479,7 @@ console.log(`i'am ${2037 - 1991} years old`); //i'am 46 years old
 */
 
 //---------------------------------------------------------------------------
-//THE CONDITIONAL(TERNARY OPERATOR):
+//28 THE CONDITIONAL(TERNARY OPERATOR):
 /*
 //This operator allows us to write something similar to if/else statement, but all in one line
 //it has 3 parts condition, if part and else, an operator is an experssion as it produces a value
@@ -451,8 +495,10 @@ console.log(drink);
 console.log(`i like to drink ${age >= 18 ? "wine" : "water"}`);
 */
 
+//29 CODING CHALLENGE
+
 //---------------------------------------------------------------------------
-//JAVASCRIPT RELEASES: ES5, ES6+,AND ESNEXT
+//30 JAVASCRIPT RELEASES: ES5, ES6+,AND ESNEXT
 //HISTORY OF JS:after internet is invented and the 1st web browsers were developed, developers wanted to
 //start making websites more interactive, they needed a programming lang fo the browser
 
