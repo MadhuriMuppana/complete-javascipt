@@ -661,4 +661,4 @@ while (dice !== 6) {
 //loop really needs is the condition which needs to stay true for it to keep running
 */
 
-//50 CODING CHALLANGE
+//50 CODING CHALLANGe
