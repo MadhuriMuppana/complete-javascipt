@@ -771,6 +771,236 @@ console.log([...question.values()]);
 
 //we should we use maps when we simply need to map keys to values and also when we need keys that are not strings
 
+//120 CODING CHALLANGE 3
+//-----------------------------------------------------------------------------
+//121 WORKING WITH STRINGS PART1:
+/*
+const airline = 'tap air Portugal';
+const plane = 'A320';
+
+//1)we can get the charecter of a string at a certain position
+console.log(plane[0]); //A
+console.log(plane[1]); //3
+console.log(plane[2]); //2
+console.log('B737'[0]); //o/p B
+
+//2)we can also read the length property of strings
+console.log(airline.length); //16
+//we can also do that directly on the string
+console.log('B737'.length); //4
+
+//comparing strings to arrays strings also have methods
+
+//3)we can get the position in which a certain letter is in the string
+console.log(airline.indexOf('r')); //6
+//this will only gives the 1st occurrence but sometimes we need the last one then we can use last indexOf
+//space also count as a charecter
+console.log(airline.lastIndexOf('r')); //10
+
+//4)we can also search for the entire words. this one is case sensitive. IF YOU SEARCH WIOTH WRONG ONE WE GET -1
+console.log(airline.indexOf('Portugal')); //8
+
+//5)INDEXES are used to extract part of a string using the slice method and the slice method needs indexes as
+//arguments
+console.log(airline.slice(4)); // air Portugal
+//4 is the begin parameter. so basically it's the position at which the extraction will start. this is 0 based
+//4 happens to be this A so there is where the sice method starts to extract
+
+//6)we also specify the end parameter(end value is not included in the string)
+console.log(airline.slice(4, 7)); //Air
+//the length of the extracted string here is always going to be end - beginning 7-4 is 3 and that is the
+//length of the string
+
+//just want to extract 1st word of the string without knowing the indexes
+console.log(airline.slice(0, airline.indexOf(' '))); //tap
+//extracting the last word
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); //portugal
+
+//we can also define a -ve begin argument then it will start counting from the end or start extracting from
+//the end
+console.log(airline.slice(-2)); //al
+console.log(airline.slice(1, -1)); //ap air Portuga
+
+//B and E are the middle seats
+const checkMiddle = function (seat) {
+  //Checking last charecter of the string if it is B or E
+  const s = seat.slice(-1);
+  if (s === 'B' || s === 'E') console.log('you got the middle seat');
+  else console.log('you got lucky');
+};
+checkMiddle('11B'); //you got the middle seat
+checkMiddle('12D'); //you got lucky
+checkMiddle('10E'); //you got the middle seat
+
+//we know that strings are primitives, so why they have methods?
+//should'nt methoda only be available on objects, however js is really smart
+//whenever we call a method on a string js will automatically behind the scenes convert that string primitive
+//to string object with the same content
+
+console.log(new String('jonas')); //string looks like an obj
+console.log(typeof new String('jonas')); //object
+*/
+
+//-----------------------------------------------------------------------------
+//122 WORKING WITH STRINGS PART2:
+/*
+const airline = 'Tap Air Portugal';
+//CHANGING THE CASE OF THE STRING
+
+console.log(airline.toLowerCase()); //tap air portugal
+console.log(airline.toUpperCase()); ///TAP AIR PORTUGAL
+console.log('jonas'.toUpperCase()); //JONAS
+
+//to fix the passenger name in the capitalization:
+const passenger = 'JoNaS'; //FIX TO Jonas
+const passengerLower = passenger.toLowerCase();
+console.log(passengerLower); //jonas
+const passengerCorrect =
+  passengerLower[0].toUpperCase() + passengerLower.slice(1);
+console.log(passengerCorrect);
+
+const passengerFunction = function (passengers) {
+  const correctNameLower = passengers.toLowerCase();
+  const capName = correctNameLower[0].toUpperCase() + correctNameLower.slice(1);
+
+  console.log(capName);
+};
+passengerFunction('MIkeL'); //Mikel
+passengerFunction('MADhUri'); //Madhuri
+
+//1)to check a user input email
+//comparing email
+const email = 'hello@jonas.io';
+const loginEmail = ' HellO@JOnas.io';
+//const lowerEmail = loginEmail.toLowerCase();//hello@ jonas.io
+//const trimmedEmail = lowerEmail.trim();
+
+const normalEmail = loginEmail.toLowerCase().trim();
+console.log(normalEmail); //hello@ jonas.io
+console.log(email === normalEmail); //true
+
+//2)TO REPLACE PART OF A STRING
+const priceGB = '288,97£';
+const priceUs = priceGB.replace('£', '$').replace(',', '.');
+console.log(priceUs); //288.97$
+
+//we can replace the entire word not just single charecter
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23!';
+console.log(announcement.replace('door', 'gate')); //All passengers come to boarding gate 23. Boarding door 23!
+//this will replace only the 1st occurence
+//console.log(announcement.replaceAll('door', 'gate'));
+
+console.log(announcement.replace(/door/g, 'gate')); //g is a global variable
+//All passengers come to boarding gate 23. Boarding gate 23!
+//create a regular expression for 'door' i.e /door/
+//replace is case sensitive
+
+//there are 3 simply methods that return booleans
+//includes, startWith, endsWith
+const planes = 'Airbus A320neo';
+//we can simply use includes as same in arrays to test if it includes A320
+console.log(planes.includes('A320')); //TRUE
+console.log(planes.includes('Boeing')); //false
+console.log(planes.startsWith('Air')); //false
+
+//check if the current plane is part of the new airbus family
+if (planes.startsWith('Air') && planes.endsWith('neo')) {
+  console.log('part of the new airbus family'); //part of the new airbus family
+}
+
+//practice excercise:
+//check if the baggage officer and passenger is basically allowed to be checked-in,
+
+const checkBaggage = function (items) {
+  const baggage = items.toLowerCase();
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are NOT allowed on board');
+  } else {
+    console.log('Welcome aboard');
+  }
+};
+
+checkBaggage('I have a laptop, some Food and a pocket of Knife');
+//You are NOT allowed on board
+checkBaggage('Socks and camera'); //Welcome aboard
+checkBaggage('Got some snacks and gun for protection'); //You are NOT allowed on board
+*/
+
+//-----------------------------------------------------------------------------
+//123 WORKING WITH STRINGS PART3
+//SPLIT AND JOIN
+//one of the most powerful string methods, which is split,
+
+//SPLIT: so split allows us to split a string into multiple parts based on a divider string
+//for some reason we have string like this. on this string we can call the split method and there we
+//need to specify a divider string,
+console.log('a+very+nice+string'.split('+'));
+//now the string will split up by plus sign and it will store the result into elements of a new array
+//(4) ['a', 'very', 'nice', 'string']
+console.log('muppana madhuri'.split(' ')); //(2) ['muppana', 'madhuri']:
+//we can now actually use the power of destructuring to create variables like this
+const [firstName, lastName] = 'muppana madhu'.split(' ');
+console.log(firstName, lastName); ///muppana madhu
+
+//now if we want to make the lastName uppercase here and then we also want to add mister in the beginning
+//we could just use a template literal
+//for this we can use joint method which is essentially opposite of split
+const newArrays = ['Mr', firstName, lastName.toUpperCase()].join(' ');
+console.log(newArrays); //Mr muppana MADHU
+
+//capitalization of string
+const capitalizeName = function (name) {
+  const names = name.split(' ');
+  const namesUpper = [];
+  for (const n of names) {
+    //namesUpper.push(n[0].toUpperCase() + n.slice(1));
+    namesUpper.push(n.replace(n[0], n[0].toUpperCase()));
+  }
+  console.log(namesUpper.join(' '));
+};
+
+capitalizeName('my name is madhuri');
+capitalizeName('javascript is a programming language');
+
+//PADDING A STRING: means to add a number of charecters to a string until the srting has a desired
+//length
+
+const mess = 'go to gate 23!';
+//PADSTART( will add some charecters at the beginning of 1st argument will be the length that we want for
+// a string and the charecter that we want to pad the string)
+console.log(mess.padStart(20, '+').padEnd(30, '+')); //++++++go to gate 23!++++++++++
+//+++++++++++go to gate 23! totoal length will be 25
+console.log('jonas'.padStart(20, '+').padEnd(30, '+')); //+++++++++++++++jonas++++++++++
+
+//when we see a credit card number on the internet you never see the entire number, usually we see last
+//4 digits and the rest is masked with some symbol
+const maskCredit = function (number) {
+  const stNumber = number + '';
+  const lastDigits = stNumber.slice(-4);
+  console.log(lastDigits.padStart(stNumber.length, '+'));
+};
+maskCredit(12345678); ///++++5678
+maskCredit(89345618); //++++5618
+//+++++++++++++++jonas
+
+//REPEAT METHOD:this simply allows us to repeat the same string multiple times
+//lets say there is some bad weather at wen airport, so when that happens usually have those long messages
+//on the screen like with the text repeating which then keep running and repaeting all the times
+const mess1 = 'bad weather... all departures delayed.. ';
+//now we want to basically create a big string repeating this one here multiple times
+console.log(mess1.repeat(5));
+//bad weather... all departures delayed.. bad weather... all departures delayed.. bad weather...
+//all departures delayed.. bad weather... all departures delayed.. bad weather... all departures delayed..
+
+//there are many planes waiting in line for takeoff
+const planesLine = function (numPlane) {
+  const planeL = `we have ${numPlane} planes in line ${'🛩'.repeat(5)}`;
+  console.log(planeL);
+};
+planesLine(6); //we have 6 planes in line 🛩🛩🛩🛩🛩
+planesLine(2); //we have 2 planes in line 🛩🛩🛩🛩🛩
+
 //---------------DATA STRUCTURES, MODERN OPERATORS AND STRINGS---------------
 //Coding Challenge #1
 /*
