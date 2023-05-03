@@ -395,6 +395,56 @@ console.log(addVat2(100));
 //-----------------------------------------------------------------------------
 //135 CODING CHALLANGE:
 
+//-----------------------------------------------------------------------------
+//136 IMMEDIATELY INVOKED FUNCTION EXPRESSION:
+//sometimes in js we need a fn that is only executed once, and then never again, so basically a fn that
+//disappears right after it's called once, and this might not appear to make much sense right now, but we
+//actually need this technique later, for ex with async/wait, so how could we do that
+
+//we could simply create a fn and then only execute it once
+const runOnce = function () {
+  console.log('this will never run again');
+};
+runOnce();
+//however we can actually run this fn again, at some other point in the code, if we want it to right, this
+//is not what we want to do, we want to execute a fn immediately, and not even having to save it somewhere
+//and so this is how we do that, so we simply right the fn expression itself, so without assigning to any
+//variable, now if we try to run this we will get error for now, so it says fn staements require a fn name
+
+//IMMEDIATELY INVOKED FN EPRESSION
+(function () {
+  console.log('this will never run again');
+})();
+//however we can still trick js into thinking that this is just an expression, we do that by simply wrapping
+//all of this into (), and so now we basically transformed the statement that we had before into an expression
+//but also this fn did'nt execute yet, we never called it, so we know that this is here is a fn, and so we
+//can then immediately call it, and so with this, we will get the text bock, this here is just the fn value
+//so it's just a fn expression, and then immediately we call it, and so this is why this pattern here, is called
+//the immediately invoked fn expression
+
+//the same would also work for arrow functions
+(() => console.log('this will also never run again'))();
+//this wont work, so we 1st wrap this into ()
+
+//2 ways of writing IIFE
+
+//WHY WAS THIS PATTERN ACTUALLY INVENTED:we know that fn creates scopes, one scope does not have access to
+//variables from an inner scope, therfore we say that all data defined inside a scope is private, we also
+//say that this data is encapsulated, so many times we actually need to protect our variables, from being
+//accidentally overwritten by some other parts of the prog or even with external scripts or libraries, it
+//is imp to hide variables and that scopes are good tool for doing this, and this is also the reason why
+//the IIFE were invented, this is not really the feature of js, it's more of a pattern, that some develoeprs
+//came up with
+
+//variables declare with let and const also create their own scope inside a block, so when we create a block
+//like this and declare isPrivate in there, then the outside can still not access isPrivate, how ever
+//variable with var is still accessable
+{
+  const isPrivate = 23;
+  var notPrivate = 46;
+}
+//console.log(isPrivate); //error
+console.log(notPrivate);
 //------------A CLOSER LOOK AT FUNCTIONS:
 
 //Coding Challenge #1
@@ -441,7 +491,7 @@ C++"],
 // This generates [0, 0, 0, 0]. More in the next section!
 answers: new Array(4).fill(0),
 };
-*/
+
 
 const poll = {
   question: 'What is your favourite programming language?',
@@ -481,3 +531,4 @@ document
   .querySelector('.poll')
   .addEventListener('click', poll.registerNewAnswer.bind(poll));
 poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+*/
