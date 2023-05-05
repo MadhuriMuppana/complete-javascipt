@@ -445,6 +445,7 @@ runOnce();
 }
 //console.log(isPrivate); //error
 console.log(notPrivate);
+
 //------------A CLOSER LOOK AT FUNCTIONS:
 
 //Coding Challenge #1
