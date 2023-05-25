@@ -456,3 +456,402 @@ getCountryData('india');
 
 //th job of IP protocol is to actually send and route these packets through the internet, so it ensures
 //that they arrive at the destination they should go, using IP address on each packet
+
+//-----------------------------------------------------------------------------
+//250: WELCOME TO CALLBACK HELL:
+//in last lecture we  did a simple ajax call to fetch data from a country's api, so we created a fn for that
+//and we call the fn mulitple times , multiple ajax calls were made at the same time, so they were basically
+//running in parallel, and we could not control which one finished 1st, in this lecture lets create a
+//sequence of ajax calls, so that the 2nd one runs only after the 1st one has finished, so in the countries
+//property here there is some prop called bordering countries this one has the code ESP which stands for spain
+//, what we will do now is after the 1st ajax call is completed we will get this border, and then based on
+//this code, we will also render the neighbouring country right here besides the original country, and so
+//in this case the 2nd ajax call really depends on the 1st one, because the data abt the neighbouring
+//counties,is ofcourse a result of the 1st call so without the 1st call, we would'nt even know which data
+//to fetch in the 2nd call, and so what we need to implement is a sequence of ajax call
+/*
+const renderCountry = function (data, className = '') {
+  const html = ` <article class="country ${className}">
+  <img class="country__img" src="${data.flag}" />
+  <div class="country__data">
+    <h3 class="country__name">${data.name}</h3>
+    <h4 class="country__region">${data.region}</h4>
+    <p class="country__row"><span>👫</span>${+(
+      data.population / 1000000
+    ).toFixed(1)} people</p>
+    <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+    <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+  </div>
+</article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const getCountryAndNeighbour = function (country) {
+  //ajax call country 1
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+
+    //render country 1
+    renderCountry(data);
+
+    //lets get the neoghbour country(2)
+    //take the 1st el, there also countries which has no neighbours at all
+    //so islands basically so for these cases, lets simply make sure we dont run any mistakes, so return
+    //immediately
+
+    const neighbour = data.borders;
+    if (!neighbour) return;
+
+    //ajax call country (2), in 2nd call we want neighbours, but there is one particularity because in the
+    //border, the country doesnt come with the name of the country, but with this code, by using the api
+    //we can also search by code, so all we have to change here is name to alpha
+
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+    request2.send();
+
+    //we have a callback inside another one
+    request2.addEventListener('load', function () {
+      const data2 = JSON.parse(this.responseText);
+      //console.log(data2);
+      //the response of this api call is no longer an array, when we serach for a code, and so countyr codes
+      //are unique, so therefore they can always just be one result
+      renderCountry(data2, 'neighbour');
+    });
+  });
+};
+getCountryAndNeighbour('portugal');
+
+//we created a special class, for the neighbouring country so that it appears littel smaller, so when it is
+//a neighbour we need to attach some class to the country and by defualt we set it to nothing
+
+//here we have nested callbacks
+
+//CALLBACK HELL: is when we have a lot of nested callbacks inorder to execute asynchornous tasks in sequence
+//this happens for all asynchronous tasks, which are handled by callbacks and just ajax calls
+
+// setTimeout(() => {
+//   console.log('1 second passed');
+//   setTimeout(() => {
+//     console.log('2 seconds passed');
+//     setTimeout(() => {
+//       console.log('3 seconds passed');
+//     }),
+//       1000;
+//   }),
+//     1000;
+// }),
+//   1000;
+*/
+//-----------------------------------------------------------------------------
+//251: PROMISES AND THE FETCH API:
+//We can escape callback hell from promises
+
+//we can now replace the old XMLHTTP request fn with the modern way of making ajax calls and that is by using
+//the fetch API
+
+// const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v2/name/${country}`);
+//   request.send();
+
+//now all we need to do is to call fetch and then with our url all that we need to do now is to store it
+//in the variable
+//const request = fetch('https://restcountries.com/v2/name/portugal');
+//now there actually one more options that we can specify here in the fetch fn, but to make a simple get
+//request like this one all we really need to pass in the url
+//console.log(request); //Promise {<pending>}
+//fetch fn immediately returned a promise here, so as soon as we started request, we stored the result of
+//that into a request variable, and then as we logged it , we immediately got the promise
+
+//PROMISE: it is an obj that is used basically as a place holder for the future result of an asunchronous
+//operation
+
+//we can also say that a promise is like a container for an asynchronous delivered value
+
+//or promise is a container for a future value
+//a conatiner a plcaholder for a future value, and the perfect ex of a future value is the response coming
+//from an ajax call, so when we start an ajax call, there is no value yet, but we know that there will be
+//some value in the future, and so we can use a promise to handle this future value
+
+//ADVANTAGES OF PROMISES:
+//1)by using promises  we no longer need to rely on events and callback fn's to handle synchronous results
+//events and callback fn's can sometimes cause unpredectable results
+//2)with promises we can chain promises for a sequence of asynchronous operations instead of nesting, with this
+//we can finally escape the callback hell, promises are es6 feature
+
+//THE PROMISES LIFE CYCLE:
+//now since promises work with asynchronous operations, they are time sensitive, so they change over time
+//nd so promises can be in diff states, and this is what we call the life cycle of a promise
+
+//so in the very beginning, we say that the promise is pending, and this is before any value resulting
+//from the asynchronous task is available, now duting this time, the asynchronous task is still doing its
+//work in the bg, then when the task finally finishes, we say that the promise is settled and there are 2
+//diff types of settled promises and that is fulfilled promise and rejected promises
+
+//FULLFILLED PROMISE:is a promise that has successfully resulted in a value just as we expect, for ex when
+//we use the promise to fetch data from an api, a fulfilled promise successfully gets thta data and its now
+//available to being used
+
+//REJECTED PROMISE: there has been an error during the asynchronous task, in the ex of fetching data from
+//an api, an error would be for ex, when the user is offline and cant connect to the api server
+
+//a promise is only a settled one and so from there the state will remain unchanged forever so the promise
+//as either fulfilled  or rejected, but it's impossible to change the state
+
+//these diff states are relavant and useful when we use a promise to get a result, which is called to consume
+//a promise, so we consume a promise when we have already a promise, for ex the promise that was returned
+//from the fetch fn, but inorder for a promise to exist in the 1st place it must 1st be built, so it must
+//be created in the case of fetch api its the fetch fn that build the promise and returns it for us to consume
+//so this case we dont have to build the promise ourselves in order to consume it now most of the time we
+//will actually just consumen promises, which is also easier and more useful part
+
+//-----------------------------------------------------------------------------
+//252: CONSMING PROMISES:
+/*
+//in this case we will consume a promise that was returned by the fetch fn, so lets
+//now implement the get country data fn by using the promise
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   //fetch(`https://restcountries.com/v2/name/${country}`);
+//   //calling the fetch fn like this will immediately returns a promise so as soon as we start the request
+//   //in the beginning this promise is ofcourse still pending because the asynchronous task of getting the data
+//   //is still running in the bg, now ofcourse at a certain point the promise will then be settled and either
+//   //in a fulfilled or in a rejected state, but for now lets assume success, so assme that promise will be
+//   //fulfilled and that we have a value available to work with, and so to handle this flfilled state,we can
+//   //use the then method thta is available on all promises, so again, this here will return a promise, and
+//   //on all promises we can call the then method, now into the then method we need to pass a callback fn
+//   //that we want to be excuted  as soon as the promise is fulfilled, so as soon as the result is available
+//   //so a fn and then this fn will actually receive one argument once its called by the js and that argument
+//   //is the resulting value of the fullfilled promise lets call it a response here bcoz this is the reponse
+//   //of an ajax call in this case, this is how we actually handle a fulfilled promise
+//   fetch(`https://restcountries.com/v2/name/${country}`).then();
+// };
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(function (response) {
+      console.log(response);
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    });
+};
+getCountryData('portugal');
+//Response {type: 'cors', url: 'https://restcountries.com/v2/name/portugal', redirected: false, status: 200, ok: true, …}
+//now what we are really interested is the data itself so the data will be there in the body, now as we see
+//the body is basically this readable stream, now actually we cannot yet really look at the data here, so
+//in order tobe able to actually read  this data from the body, we need to call the JSON method on the repsonse
+//so JSON is a method that is available on all repsonses of the fetch method //response.json();
+//so again this json method here is a method that is available on all the responses obj's that is coming
+//from the fetch fn, so all of the resolved values, and indeed this reponse here is infact a resolved value
+//therefore thye json method is attached to it, now the pblm here is thta json fn itself , is actually
+//also n asynchronous fn, and so what that means is that it will also return a new promise, what we actually
+//need to do is to return the promise and we will need to handle that promise as well, and so the way to do
+//that is to then call another then right here
+
+//fetch fn here will return a promise and then we handled that promise using the then method, but then to
+//actually read the data from the response, we need to call the json method on that response obj, now this 
+//itself ill also return a promise, and so if we then turn that promise from this method then basically
+//all of this becomes a new promise itself, and so since this is a promise  we can then agai, call the then
+//method on that, and so then again we have a callback fn and this time we get access to the data, because the
+//resolved value of this promise here is going to be the data itself, so basically the data that we are looking
+//for, 
+*/
+/*
+const renderCountry = function (data, className = '') {
+  const html = ` <article class="country ${className}">
+    <img class="country__img" src="${data.flag}" />
+    <div class="country__data">
+      <h3 class="country__name">${data.name}</h3>
+      <h4 class="country__region">${data.region}</h4>
+      <p class="country__row"><span>👫</span>${+(
+        data.population / 1000000
+      ).toFixed(1)} people</p>
+      <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+      <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+    </div>
+  </article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const getCountryAndNeighbour = function (country) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    renderCountry(data);
+    console.log(data);
+    const [neighbour] = data.borders;
+    if (!neighbour) return;
+
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+    request2.send();
+
+    request2.addEventListener('load', function () {
+      const data2 = JSON.parse(this.responseText);
+      renderCountry(data2, 'neighbour');
+    });
+  });
+};
+//getCountryAndNeighbour('portugal');
+//getCountryAndNeighbour('usa');
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+// getCountryData('portugal');
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+// getCountryData('portugal');
+*/
+//now all we have to do is to render country
+//this fetches something and then we get a response which will be transformed to json, and then we take thta
+//data and render the country to the DOM
+
+//-----------------------------------------------------------------------------
+//253: CHAINING PROMISES:
+//how to chain promises in order to also render the neighbouring country of the initial country, we already
+//have a small chain of promises becoz of json fn, and here these 2 then's called in sequence and are basically
+//already a small chain,
+
+//we 1st get data about the country, but then we also want to get the data about the neighbouring country
+//and so again the 2nd ajax call depends on the data from the 1st call, and so they need to be done in
+//sequence, the 2nd ajax needs to be happed in the then handler, so as soon as we get the data, then we need
+//to get the neighbour country and do the ajax call for thta one as well
+/*
+const request = fetch('https://restcountries.com/v2/name/portugal');
+console.log(request);
+
+const getCountryData = function (country) {
+  //country 1
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(function (data) {
+      console.log(data);
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) return;
+      //country2
+      return fetch(`https://restcountries.com/v2/aplha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
+};
+getCountryData('portugal');
+*/
+
+//what we need to do now is return this new promise for country 2 fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+//because then whwn we do that, we will be able to chain a new then method on the result of this then method
+//the then method always returns a promise, no matter if we are actually return anything or not, bt if we
+//do return a value, then that value will become the fulfillment value of the return promise, by retrning
+//this promise here, then the fulfilled value of the next then method will be the fulfilled value of the
+//previous promise, basically this then method will returns a new promise and here we can then one more time
+//handle the sucess value of that promise, so one more time we are calling it as a response, because here
+//we are dealing with the fulfilled value of a fetch, and so that is the response, and here we need one more
+//time call a json method and here again the fulfilled value of the promise will become that body so the data
+//that is stored in the body and then we can again handle that
+/*
+const request = fetch('https://restcountries.com/v2/name/portugal');
+console.log(request);
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) return;
+      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
+};
+getCountryData('portugal');
+*/
+//promises really allow us to handle these complex aynchronous operations with as many steps as we want
+//right now we have 4 steps, here instead of the callback hell we have what we call a flat chain of
+//promises
+
+//a pretty common mistake that many beginners make, which is to basically chain this then method directly
+//onto a new nested promise
+const renderCountry = function (data) {
+  const html = ` <article class="country">
+  <img class="country__img" src="${data.flag}" />
+  <div class="country__data">
+    <h3 class="country__name">${data.name}</h3>
+    <h4 class="country__region">${data.region}</h4>
+    <p class="country__row"><span>👫</span>${+(
+      data.population / 1000000
+    ).toFixed(1)} people</p>
+    <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+    <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+  </div>
+</article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+const getCountryData = function (country) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    //console.log(this.responseText);
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+    renderCountry(data);
+    const neighbour = data.border;
+    if (!neighbour) return;
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+    request2.send();
+
+    request.addEventListener('load', function () {
+      const [data2] = JSON.parse(this.responseText);
+      console.log(data2);
+      renderCountry(data2);
+    });
+  });
+};
+getCountryData('portugal');
+getCountryData('usa');

@@ -5022,6 +5022,247 @@ console.log(huge + ' a num is very big'); //455657567678678797978 a num is very 
 console.log(10n / 3n); //3n
 console.log(10 / 3); //3.3333333333333335
 */
+//-----------------------------------------------------------------------------
+//175 CREATING DATES:
+/*
+//when we built real worl applications one type of data that comes up all the time is dates and time
+//FUNDAMENTALS OF DATES AND TIMES:
+
+//DATES:
+//1st we have to create a date
+//Create a Date: 4 ways of creating a date, they all use the new Date constructor fn, but they can accept
+//diff parameters
+
+//1)simply to add new Date constructor, and assign it to variable:
+
+const now = new Date();
+console.log(now); //Fri May 05 2023 17:02:47 GMT-0500 (Central Daylight Time)
+//we get the current date and time at very moment
+
+//2)is to parse the date from a date string
+console.log(new Date('May 05 2023 17:02:47')); //Fri May 05 2023 17:02:47 GMT-0500 (Central Daylight Time)
+//it will parse the time based on the given string
+
+console.log(new Date('December 27 2020')); //Sun Dec 27 2020 00:00:00 GMT-0600 (Central Standard Time)
+//js is pretty smart in parsing out the string, however it is generally not a good idea to do this, because
+//it can be quite unreliable
+
+//however if the string was actually created by js itself, then it is pretty safe
+
+//in our application we have movement dates so lets parse these dates
+console.log(new Date(account1.movementsDates[0])); //Mon Nov 18 2019 15:31:17 GMT-0600 (Central Standard Time)
+//2019-11-18T21:31:17.178Z Z here means the UTC, coordinated universal time, which is basically the time
+//without any timezone in London and also without any day light saving, this is based on a string
+
+//3)we can also pass in a year, month, day, hour,minute even second into this constructor
+
+console.log(new Date(2037, 10, 19, 15, 23, 5));
+//Thu Nov 19 2037 15:23:05 GMT-0600 (Central Standard Time), here we have 10 but november is actually the
+//month 11, that means that the month here in js is 0 based, js actually autocorrects the day
+
+console.log(new Date(2037, 10, 31)); //we know that november has 30 days but we specify 31
+//Tue Dec 01 2037 00:00:00 GMT-0600 (Central Standard Time)
+//js will autocorrect it to the next day
+
+//4)we can also pass the amount of ms passed since the beginning of the UNIX time, which is jan1 1970
+console.log(new Date(0));
+//Wed Dec 31 1969 18:00:00 GMT-0600 (Central Standard Time)
+//0 ms after initial unix time
+
+//3 days after this
+console.log(new Date(3 * 24 * 60 * 60) * 1000);
+//3 days 24 hours * 60 minutes * 60 seconds * 1000milliseconds
+//converting days to ms //259200000
+
+//this number we calculated here is a timestamp, we call timestamp of day number 3
+//these dates we created here are just another type of sepcial objects, therfore they have their own methods
+//we can use these methods to get or set components of the dates
+
+//WORKING WITH DATES:
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future); //Thu Nov 19 2037 15:23:00 GMT-0600 (Central Standard Time)
+//to get full year
+console.log(future.getFullYear()); //2037
+//to get a month(month is 0 based)
+console.log(future.getMonth()); //10
+//to get date(this is actually a day)
+console.log(future.getDate()); //19
+//to get day(day is actually the day of the week)
+console.log(future.getDay()); //4
+//hours,minutes,seconds
+console.log(future.getHours()); //15
+console.log(future.getMinutes()); //23
+console.log(future.getSeconds()); //0
+//we can get a nicely formatted string
+console.log(future.toISOString()); //2037-11-19T21:23:00.000Z, this is the iso string, which follows some
+//kind of international standard
+
+//TOISOSTRING: converts date obj to string
+//when we want to comnvert date obj into a string we use toISOString
+
+//we can also get the time stamp for the date
+console.log(future.getTime()); //2142278580000
+
+//when we want to create a new date based on milli seconds
+console.log(new Date(2142278580000)); //Thu Nov 19 2037 15:23:00 GMT-0600 (Central Standard Time)
+
+//DATE.NOW: will gives us the current time stamp
+//to get a time stamp right now, if we want simply the current time stamp, for this exact movement
+console.log(Date.now()); //1683326019133
+
+//SET METHODS FOR ALL OF THESE VERSIONS
+future.setFullYear(2040);
+console.log(future); //Mon Nov 19 2040 15:23:00 GMT-0600 (Central Standard Time)
+*/
+
+//-----------------------------------------------------------------------------
+//176 ADDING DATES TO BANKIST APP
+//we have date near current balance and in all movements
+//1st we have to do is to fake it that we always login
+/*
+currentAcccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+//lets start by displaying the current bal, lets now create this date 
+*/
+
+//-----------------------------------------------------------------------------
+//177 OPERATIONS WITH DATES
+/*
+//one thing we can do with dates is to do calculations with them, we can subtract one date from another date
+//inorder to calculate how many days have passed b/w the 2 dates, this works because whenever we attempt
+//to convert a date to a number, then the result is going to be the timestamp in ms, and with these ms, we
+//can then perform calculations
+
+const future = new Date(2037, 10, 19, 15, 23);
+//converting date to a number
+console.log(Number(future)); //2142278580000 we will gte a timestamp
+
+//creating a fn that takes in 2 dates and going to return the number of days thta pass b/w these 1 dates
+const calcDaysPassed = (date1, date2) =>
+  Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
+const days1 = calcDaysPassed(
+  new Date(2037, 3, 14),
+  new Date(2037, 3, 24) //10.4222
+);
+console.log(days1); //864000000 i.e 10 days
+
+//now converting this 864000000 to days so divide it to 1000 * 60min * 60 hors * 60 days
+*/
+
+//-----------------------------------------------------------------------------
+//178 INTERNATIONALIZING DATES(INTL):
+//js has a new internationalzing api, all it us is to easily format numbers and strings according to diff
+//languages, so with this new api, we can make our application support diff languages fro users around the
+//world
+
+//in our application we have dates in 2 places, 1st near current balance and in movements
+
+//-----------------------------------------------------------------------------
+//179: INTERNATIONALIZING NUMBERS (INTL):
+/*
+const num = 3884764.23;
+const options = {
+  style: 'currency',
+  unit: 'mile-per-hour',
+  currency: 'EUR',
+  //useGrouping: false,
+};
+//there are 3 diff options for style they are unit,percent,currency, if we have curreny then unit is ignored
+//but we do have to define currency, we should set currency manually, we can also turn off or on the grouping
+//useGrouping 3884764.23 the number is just printed without separators
+console.log('US:', new Intl.NumberFormat('en-US', options).format(num)); //US: 3,884,764.23
+console.log('GERMANY:', new Intl.NumberFormat('de-DE', options).format(num)); //GERMANY: 3.884.764,23
+console.log('SYRIA:', new Intl.NumberFormat('ar-SY', options).format(num)); ///SYRIA: ٣٬٨٨٤٬٧٦٤٫٢٣
+console.log(
+  'Browser:',
+  new Intl.NumberFormat(navigator.language, options).format(num)
+);
+*/
+
+//-----------------------------------------------------------------------------
+//180: TIMERS: setTimeout AND setInterval:
+/*
+//we have to kinds of timers:
+//SET TIMEOUT TIMER (setTimeout): runs just once, after a defined time
+//SET INTERVAL TIMER(setInterval): keeps running forever until we stop
+
+//we can use setTimeout to execute some code at some point in the future, so lets use this to simulate
+//ordering pizza, so when we order pizza it does'nt arrive right away instead it takes some time, and we can
+//simulate that, let's write setTimeout and this fn receives a callback fn, so just like some array methods,
+//or dom handler fn's, this callback fn is the 1st argument of setTimeout fn, we do nmot call this fn, we
+//simply pass in this fn as an argument to setTimeout, and it is this fn, who will then call our callback fn
+//in the future, and when that future arrive? that is what we specify the 2nd argument, so here we will pass
+//in the amount of milli seconds, that will pass until this fn is called, lets say we will call this fn after
+//3 sec
+
+//setTimout: simply schedules a fn to run after a certain amount of time, but the callback fn is only executed
+//once
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`here is your pizza with ${ing1} and ${ing2}`),
+  3000,
+  ...ingredients
+);
+//here is your pizza with olives and spinach
+
+//we really delayed calling this fn, we can also say that we schedule this fn call for 3seconds later
+//the code execution does not stop here at this point, so when execution of our code reaches this point, it
+//will simply call the setTimeout fn, it will then essentially register this callback fn here to be called
+//later, and then the code execution simply continues
+console.log('waiting');
+
+//as soon as js hits this line of code, it will basically keep counting the time in the bg and register
+//this callback fn to be called after that time has elapsed and then immediately js will move on to the next
+//line, this mechanism is called asynchronous js,
+
+//what if we want to pass some arguments into this fn, it is not that simple as we not calling this fn, and so
+//we cannot pass in the arguments while calling, setTimeout has a solution for that, so basically all the
+//arguments that we pass after the delay will be arguments to the fn, indeed the 3rd argument thta we passed
+//in will now become the 1st argument, or 1st parameter of this fn
+
+//we can actually cancel the timer, atleast until the delay has actually passed, so before these 3 sec have
+//passed, we can cancel the timeout, so 1st keeping ingredients into an array
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+
+//improving our app by implemeting the timer to simulate the approval loan, when we click the btn to request
+//a loan then we get the value immediately right now but typically a bank takes some time like some days,
+//or some weeks to approve that loan
+
+//WHAT IF WE WANT TO RUN A FN OVER AND OVER AGAIN like every 5sec, for that we have setInterval fn
+
+//SETINTERVAL(setInterval):
+//Creating a setInterval fn to basically create a clock that will disply in our console, every second a new
+//date is created
+setInterval(function () {
+  const now = new Date();
+  console.log(now);
+}, 1000);
+*/
+//-----------------------------------------------------------------------------
+//181: IMPLEMENTING A COUNTDOWN TIMER
+/*
+//for security reasons, real bank applications will logout users after some inactive time, like after 5 min
+//without doing anything
+
+//whenever the user logs in the logout timer will start or restart, then as soon as the logout timer expires
+//which will be like after 5 or 10 min then we want to log the user out, the place where we want to logout
+//timer is in login fn
+//lets create alogout fn and this fn does not requires any arguments, all it does is to basically export
+//some functionality into an external fn,
+//1)we will start by setting the time,
+//2)then we want to call the timer every second,
+//3)then in each call, print the remaining time to the user interface
+//when the time is at 0,, so after timer is basically expired stop timer and logout the user
+
+//another functionality that we want our timers to have is to reset once we do something in the account because
+//the goal fo this timer here is to track the inactivity of the user, so the time where the user does'nt do
+//anything but if i do something, lets sat  transfer money, then we should be not get logged out it should be reset
+//it, what we ned to do is to also reset the timer whenever the user does a transfer or loan, all we need to
+//do is to clear interval using the timer that we already and then start it again
+*/
 /*
 //----------SECTION 19-----------=====
 
