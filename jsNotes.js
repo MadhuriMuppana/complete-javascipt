@@ -5263,6 +5263,3146 @@ setInterval(function () {
 //it, what we ned to do is to also reset the timer whenever the user does a transfer or loan, all we need to
 //do is to clear interval using the timer that we already and then start it again
 */
+
+//----------SECTION 14-----------=====
+//-----------------------------------------------------------------------------
+//184: PROJECT:'BANKIST WEBSITE
+//a link when we have a '#', when we have this # as hyperlink, then that will make the page jump to the top
+//that is the default behvaiour, when we click a link that contains # as hyperlink
+
+//instead of for loop we can do it with for each loop
+
+//we have this btnsOpenModal, which is a nodelist, because it is the result of querySelectorAll, nodelist
+//is not an array, but still it does have default for each method
+
+//-----------------------------------------------------------------------------
+//185: HOW THE DOM REALLY WORKS:
+//DOM:is the interface b/w our js code and browser, or more specifically HTML documents that are rendered in
+//and by the browser
+
+//DOM allows us to make js interact with browser
+//we can write js to create. modify and delete elements, set styles,classes,attributes,and listen and respond
+//to events
+//DOM is genereated from any html document, DOM tree is a tree like structure made out of nodes, we can then
+//interact with this tree
+
+//HOW THE INTERACTION ACTUALLY WORKS?
+//DOM is a very complex API (application programmin interface), so its the interface we can use to programmatically
+//interact with the DOM, DOM conatins tons of methods and properties that we use to interact with the DOM treee
+//such as the querySeclector, addEventListener, or createElements methods, or alos innerHTML,textContent,
+//or children properties and many more, in the DOM there are diff types of nodes, some nodes are html elements
+//but others are just like text, all these DOM methods and properties are organized into these diff types of
+//objects,
+
+//HOW DOM API IS ORGANIZED BEHIND THE SCENES?
+//every single node in the DOM tree is of the type node, and such as everything else in js, each node is
+//represented in js by an object, this object gets access to special node methods and properties such as
+//text content, child nodes, parent node,clone node and many others, this node type has a couple of
+//child types to say, these are the el ype,text type, the comment type, nd also the document type, so whenever
+//there is a text inside any el, it gets its own node, and thta node will be of the type text, same happens
+//for html comments, everything that is in html has to go into the dom as well, for the el itself there is
+//the el type of node, and this type of node gives each html el access to tons of useful properties
+
+//ecah el is represented internall as an obj, the el type has internally an html el child type and that el
+//type itself has exactly one child type fro each html el that exists in html
+
+//INHERITANCE: all the child types will alos gets access to the methods and props of all their parent node
+//types, and el weill get access to everything from the el type
+
+//docuemnt is another type of node, it contains imp methods
+
+//-----------------------------------------------------------------------------
+//186: SELECTING,CREATING,DELETING ELEMENTS:
+/*
+
+//selecting very top of any html document is document
+
+//SELECTING DOCUMENT:
+//we have a special way of selecting the entire docuement of any web page and that is document el, jsu doc
+//here is not enough to select the doc el, beacuase this is not the real dom el, if we want to apply css
+//style to the entire page we always need to select docuemnt el,
+//SELCTING ELEMENTS
+console.log(document.documentElement);
+
+//we can also easily select head and body
+console.log(document.head);
+console.log(document.body);
+
+//for these special el's there is no need to wrire any queryselector
+
+const header = document.querySelector('.header'); //this will return the 1st el that matched this selctor,
+//if we want to select multiple el's then we shoiuld use
+const allSections = document.querySelectorAll('.section');
+console.log(allSections); //this will return a nodelist and that contains all of the el's
+
+//these are not available only on the document here, but also on all the el's
+
+document.getElementById('section--1');
+//to get all the elements with same name
+const allButtons = document.getElementsByTagName('button');
+console.log(allButtons);
+//this method actually returns htmlcollection
+//HTMLcollection: is so-called live collection, means that if the dom changes then this collection is also
+//immediately updated automatiocally, same does not happens with nodelist
+
+//this is similar to getElementById and getElementsByTagName, we can now specify a classname, we dont need
+//a selector, this will return htmlcollection
+console.log(document.getElementsByClassName('btn'));
+
+//CREATING AND INSERTING ELEMENTS:
+//we can create html el's using insertAdjacentHTML, this is quick and easy way of creating el's
+//.insertAdjacentHTML
+
+const message = document.createElement('div');
+//this here creates a dom el and then store that el into message, this el is not yet anywhere in the dom
+//all this is a dom obj that we can now use to do something on it, if we want it on the page then we have
+//to manually add it into the page,
+//we can add classes
+message.classList.add('cookie-message');
+//we can add text into the el
+// message.textContent = 'text cookie message';
+//we can also insert html, we can use this prop to read and set content
+message.innerHTML =
+  'text cookie message <button class ="btn btn-cookie">got it</button';
+
+//to insert this into our dom i.e in header, we can append this mesg to that el
+//header.prepend(message);
+//PREPENDING: adds the el as the 1st child of this header el, we can also add it as the last child that is append
+//APPEND:to add el as the last child of the selected el
+///header.append(message);
+//now it is really appended as the last child, we can see that the el is only inserted at once, because this el
+//message is now indeed a live el living in the dom therfore is cannot be at mulitple places at the same time
+
+//1st we have prepended and then appended, so the appended basically move the el from being the 1st child
+//to being the last child
+
+//we can use the prepend and append method not only to insert el's but also to move them,
+
+//what if we actullay wanted to insert multiple copies of the same el,, we actually would have to 1st copy
+//the 1st el, instead of appending msg directly, we 1st clone it, so that is cloneNode, and then we need to
+//pass i true which means that all the child el's will also be copied
+//header.append(message.cloneNode(true));
+//this is not what we want, lets only append it
+header.append(message);
+
+//there are 2 more methods before and after
+//header.before(message); //this will insert before header el
+//header.after(message);
+
+//DELETING THE ELEMENTS:
+//what we have to do is to delete the msg el when we click the btn
+document.querySelector('.btn-cookie').addEventListener('click', function () {
+  message.remove();
+});
+
+//-----------------------------------------------------------------------------
+//187: STYLES,ATTRIBUTES,CLASSES:
+document.querySelector('.btn-cookie').addEventListener('click', function () {
+  message.remove();
+});
+
+//STYLES:
+//to set a style on el
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+
+console.log(message.style.color);
+console.log(message.style.backgroundColor); //rgb(55, 56, 61)
+//the style that we set manually, we cannot get the style that is hidden inside of a class, ex we want color
+//which is defined in a style sheet
+
+//we can still get the styles if we really want to, all we need to do is to use getComputedSyles,
+//and from that we can take the prop
+console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message).height); //string
+//COMPUTED: real style as it appears on the page and even if we do not declare in our css
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px';
+//when we are adding number to a string it wont work
+
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+//ATTRIBUTES:
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt);
+console.log(logo.src);
+//if we add other prop that is not standared then js will not automatically create a prop on the obj
+console.log(logo.className); //nav__logo, it should be class but we have to use classNmae
+
+//as we can read the values we can also set them
+logo.alt = 'beautiful logo';
+
+//non-standared
+console.log(logo.designer); //undefined
+//because this is not a standared prop that is expected to be on the images
+//there is another way of reading this el from the dom
+console.log(logo.getAttribute('designer')); //jonas
+logo.setAttribute('company', 'bankist');
+
+console.log(logo.src);
+///Users/ravisankaruppu/madhuri/my_new_works/complete-javascript-course-master/13-Advanced-DOM-Bankist/starter/img/logo.png
+////the src id diff than what we have in html
+//this url is the absolute url, while what i have in html is just a relative url, so relative to the folder
+//in which the index.html file is located, if we literally want the same url that is in html
+file: console.log(logo.getAttribute('src')); //img/logo.png
+
+//there is a special type of attributes,
+//DATA ATTRIBUTES:
+//these attributes starts with data, this attribute is at logo.dataset and then .versionNumber here we use camelcase
+//just like prop names we need to transform into camelcase
+console.log(logo.dataset.versionNumber); //3.0
+//these special attributes always stored in dataset obj
+
+//CLASSES:
+logo.classList.add('c');
+logo.classList.remove('c');
+logo.classList.toggle('c');
+logo.classList.contains('c');
+*/
+//-----------------------------------------------------------------------------
+//188: IMPLEMENTING SMOOTH SCROLLING EFFECT
+//SELECTING THE BTN AND THE SECTION THAT WE WANT TO SCROLL TO
+/*
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+//ADDING EVENT LISTENER TO THE BTN:
+btnScrollTo.addEventListener('click', function (e) {
+  //we need to get 1st the coordinates of the el that we want to scroll to
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+  //DOMRect {x: 0, y: 523, width: 1440, height: 1599.1953125, top: 523, …}
+
+  //lets get the coords for the btn we had clicked so e.target
+  console.log(e.target.getBoundingClientRect());
+  //DOMRect {x: 145, y: 376.0859375, width: 112.4609375, height: 28.5, top: 376.0859375, …}
+
+  //we can also get the current scroll position, these values are at window
+  console.log('current scroll:', window.pageXOffset, window.pageYOffset); //current scroll: 0 90
+
+  //we can also read the heoght and width of the view port
+  console.log(
+    'width/height',
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  ); //width/height 523 1440
+
+  //scrolling: top here is always relative to the viewport but not to the document
+  // window.scrollTo(
+  //   s1coords.left + window.pageXOffset,
+  //   s1coords.top + window.pageYOffset
+  // );
+
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset,
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+//x is measured from left side, y is measured from top
+//y is the distance b/w the current position of view port and the top of the page
+*/
+//-----------------------------------------------------------------------------
+//189: TYPES OF EVENTS AND EVENT HANDLERS:
+/*
+//EVENT: is basically a signal that is generated by a certain dom node, and the signal means that something
+//has happned for example aclick somewhere, a mouse moving, or the user trigger the full screen mode and really
+//anything
+
+//we can liosten for this events using eventListeners, so that we can then handle them, but no matter if we
+//handle a certain event or not, that event always happens when a user clicks
+
+//mouseenter is like the hover event, so it fires whenever the mouse enters a certain el, so whenever that
+//happens lets create an alert
+// const h1 = document.querySelector('h1');
+// h1.addEventListener('mouseenter', function (e) {
+//   alert('great you are reading the heading');
+//  });
+
+// //another way of attaching evenntListener, by using onEvent prop directly on the el
+// h1.onmouseenter = function (e) {
+//   alert('great you are reading the heading');
+// };
+
+//addEventListner is best to attach event handler because it allows us to add mulitple event listeners to
+//the same event, we can actually remove an event handler incase we dont need it anymore, for that 1st we
+//need to export that fn into a named fn
+const h1 = document.querySelector('h1');
+const alertH1 = function (e) {
+  alert('great you are reading the heading');
+};
+h1.addEventListener('mouseenter', alertH1);
+setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
+//we can now actually prevent that from happening, after lsitennig for event and then handle that evnet in the
+//fn we can then remove that event listener
+
+//2rd way of handling events that is html attribute
+*/
+
+//-----------------------------------------------------------------------------
+//190: EVENT PROPAGATION: BUBBLING AND CAPTURING:
+//js events has a very imp prop, they have a so-called capturing phase and a bubbling phase
+
+//    <html>
+//   <head>
+//     <title>a sample page</title>
+//   </head>
+//   <body>
+//     <section>
+//       <p>
+//         a para with link <a>link</a>
+//       </p>
+//       <p>second para</p>
+//     </section>
+//     <section>
+//       <img src="dom.png" alt="the dom"></img>
+//     </section>
+//   </body>
+// </html>
+// }
+
+//document -> element(html) => element(body) => element(section) =>element(p) => element(a)
+//here we can see all the parent elements of the red anchor el, this beacuse we can simulate what exactly
+//happens with an event when someone clicks on that link
+
+//lets say that a click happens on the link,the dom then generates a click event right away however this event
+//is actually not generated at the target el, so at the el where the event is happened in this case the click
+//on the anchor el, instead the event is generted at the root of the document, so at the very top of the dom
+//tree, and from there he so-called capturing phase happens where the event then travels all the way down
+//from the docyment root to the target el, and as the event travels down the tree it will pass through every
+//single parent el, of the target el, until it reaches the target, as soon as the event reaches the target
+//the target phase begins, where events can be handled right at the target, we do that with the event listeners
+//so the event listeners wait for a certain event to happen on a certain el, and as soon as the event occurs
+//it runs the attached callback fn
+
+// document.querySelector('a').addEventListener('click', function () {
+//   alert('you clicked me');
+// });
+
+//in this case it will simply create this alert window, this happens in the target phase, now after reaching
+//the target the event then actually travelks all thw way up to the document root again in the so-called
+//bubbling phase, so we say that the events bubbles up from the target to the document root, and just like in
+//the capturing phase the event passes hrough all its parent el's, just parents not through any sibilings
+//so an an event travels down and up the tree, thye pass through all the parent el's but not through any
+//sibilings
+
+//if the event also happened in each of the parent el's, so again, as the event bubbles through a parent
+//el, its as if the event had happened right in that very el if we attach the same event lsitener, also
+//for ex to the section el, then we get the exact same alert window for the section el as well, so we
+//would havehandled the exact same event twice once at its target el, and ones at one of its parent el's
+//this behaviour will allows us to implement really powerful patterns
+
+//by default events an only be handled n the target and in the bubbling phase however we can set up event
+//listeners in a way that they listen to the vents in the capturing phase instead
+
+//also actually not all types of events do have a capturing and bubbling phase some of them created right
+//on the target el,nd so we can only handle them there
+
+//we can also say that events propagate, which is really what a capturing and bubbling phase is, its events
+//propagating from one place to another
+
+//-----------------------------------------------------------------------------
+//191: EVENT PROPAGATION IN PRACTICE
+/*
+//we can do that by attaching event handlers to this navigation link and also to all of its parent el's
+//then as we click this link we will give all these el's random bg colors,and this will then allow us to visualize
+//eactly how event bubbling is happening
+
+//creating random color random color is just a string
+//rgb(255,255,255)
+
+//random number generator
+const randomInt = (max, min) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+console.log(randomColor());
+
+//Attaching event handlers
+//in the event handler the this keywords always points to the element on which that event handler
+//is attached, in this case that is  document.querySelector('.nav__link')
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('link', e.target, e.currentTarget);
+  // link <a class="nav__link" href="#" style="background-color: rgb(204, 31, 225);">
+  //   Features
+  // </a>;
+  //stop propagation
+  //e.stopPropagation();
+});
+
+//when we do the same with parent element(nav-links) of nav__link
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('conatiner', e.target, e.currentTarget);
+});
+//the container also gets it own bg color, the event actually happens at the docuemnt root and from there
+//it then travels down to the target el, in this case that is link, and then from there it bubbles up, and
+//bubbling up means it's if event had also happened in all the parent el's, this is the reason why this
+//exact event is now also being handled by this document.querySelector('.nav__links') event listener that is
+///on nav__links, it is as if the click event here on this link had also happened right here document.querySelector('.nav__links')
+//in this el, so both of this handlers here are noe handling the same event which happened on this link,
+//when we click only on the nav links, the color on the lionk itself keeps unchanged and that beacause it
+//is the parent el, and so from here the evnt only bubbles up to its parent el
+
+document.querySelector('.nav').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('nav', e.target, e.currentTarget);
+});
+
+//now the click event happened here was indeed handled on all the 3 places which have a click event handler
+
+//EVENT TARGET: target is actually where the event originated, so where the event 1st happened, so this is
+//not the el on which the handler is actually attached, this is where the event happened, in this case where
+//the click happened, and it is not the el on which the event handler is attached
+
+//when we click the nav-link all the 3 el's got a random bg color, and the target is always the same
+
+//in all the 3 handlers the target will alwasy be the same, because all of them are handling the same event
+//this is because of event bubbling, so the event originated here in this link, but then it bubbles up
+//to its parent el.  besides the target there is actuall also the currentTarget
+
+//CURRENT TARGET:is indeed, the el on which the event handler is attached, the current targte is actually
+//same as the this keyword
+
+//we can actually stop the event propagation all we have to do is on the event stop propagation
+//e.stopPropagation
+
+//these 3 event handlers receive events from the target el's and also from the bubbling phase, the event handler
+//fn's are listening for click events that happen on the el itself and they are also listening for events
+//that keep bubbling up from their child el's
+
+//WHAT ABOUT THE CAPTURE PHASE: events are captured when they come down from the document root all thw way
+//to the target, but our event handlers are not picking up these events during the capture phase, this is
+//the default behaviour of the event listener, and the reason for that is that the capturing phase, is usually
+//irrelvant, if we really do want to catch the events during the capturing phase, we can define a 3rd parameter
+//in the event listener, we can the 3rd parameter to true or false, in this case this used capture parameter
+//is set to true, the event handler will no longer listen to the bubbling events, but instead to capturing
+//events, the 1st event through which the event passes is navigation, because this el is now actually listening
+//for the event as it travels down from the DOM, while these other ones are listening fro the event, as it
+//travels back up
+*/
+//-----------------------------------------------------------------------------
+//192: EVENT DELEGATION: IMPLEMENTING PAGE NAVIGATION
+/*
+//now we are going to bulid a smooth scrolling behaviour in the navigation, so that when we click onf of these
+//links here, it will then automatically scroll smoothly to the corresponding section
+//page navigation
+//document.querySelectorAll('.nav__link') this will return a node list and now we can use it for each method
+//in order to attach a event handler to each of the el's
+document.querySelectorAll('.nav__link').forEach(function (el) {
+  el.addEventListener('click', function (e) {
+    e.preventDefault();
+    //gettin href so that on which we want to scroll to
+    const id = this.getAttribute('href');
+    console.log(id);
+    //we now take this and select an el based on this, and then simply scroll to that el
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    //but this is not really efficient, so we adding here the same exact callback fn here (this is evenbt lsitener)
+    //we are adding once to each of these el's so exact same fn is now attached to these 3 el's, it would be
+    //fine for just 3 el's what if we have 1000 el's, if we attach event handler to 1000 el's, then we would
+    //effectively creating 1000 copies of the same fn, so the better sol is to use the event delegation, so
+    //EVENT DELEGATION:in this we use the fact that event bubble up, and we do that by putting event liostener
+    //on a common parent of all the el's that we are interested in, so in our ex, it's the container that
+    //around all of these links so we will put over event handler on this (nav__links) el, and then when
+    //a user clicks on one of the links the event is generated, and bubbles up and then we can basically catch
+    //that event in this common parent el and handle it there, because we also know where the evnt is
+    //actually originated
+  });
+});
+
+//in event delagation we need 2 steps, 1st we add the event listener to a common parent el, of all the el's
+//that we are interested in, and in that event listener determine what el originated the event, so we can
+//then work with that el where the event is actually created
+//1)add event listener to common parent el
+//2)determine what el originated the event
+
+//now we actually only wnat to work with the clicks that happened on one of the links, but the click that happens
+//on the nav__links the container, so now we need a matching strategey here in order to match only the el's
+//that we are interested in, in this case the best way to that is to simply check if the target has this
+//nav__link class
+
+//event delegation is lot more efficient than simply attaching same event handler to mulitple el's, instaed
+//we simply add one big event handler fn to the parent el, of all the el's that we are interested in, and
+//then we simply determined where the click event came from, then we also need this matching strategy
+//ecause we wanted to ignore clicks that did not happen right on one of these links
+
+//there is even more important use case of event delegation which is when we are working with el's that are
+//oy yet on the page on run time, so by the time the page loads the great examples are buttons that are added
+//dynamically while using the application so its not possible to add event handlers on to el's that do not
+//exist but we will still be able to handle events on el's that dont exist at beginning by using event delegation
+
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  // console.log(e.target);
+  //matching strategey
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});*/
+
+//-----------------------------------------------------------------------------
+//193: DOM TRAVERSING:
+/*
+//TRAVERSING:is walking through dom, which means that we can select an el based on other el, this is imp
+//bcoz sometimes we need to select el's relative to a certain other el, for example a direct child or
+//a direct parent el or sometimes we dont even know the structure of the dom at the run time, and in all these
+//cases, we need to dom traversing
+const h1 = document.querySelector('h1');
+//in h1 we have many other el's
+//going downwards(selecting child el's)
+//1)way of selecting is using querySelector, we can select class highlights
+console.log(h1.querySelectorAll('.highlight')); //NodeList(2) [span.highlight, span.highlight]
+//selects all the el's with the hightlight class that are children of h1 el, that would work no matter how
+//deep these child el's would be inside of h1 el, these 2 el's direct children of h1, but as i said it would
+//go down as deep as necessary
+
+//sometimes all we need are direct children, and so for that we can use h1.childNodes
+console.log(h1.childNodes);
+//NodeList(9) [text, comment, text, span.highlight, text, br, text, span.highlight, text]
+//we get all the el's, because nodes can be anything so they can be texts, or el's or even comments, this
+//gives us every single node of every single type that there exists
+console.log(h1.children); //HTMLCollection(3) [span.highlight, br, span.highlight]
+//this gives us html collection which is a live collection, so its updated so here indeed we get only 3 el's
+//that are actually inside of the h1, this only works direct children
+
+//there are also 1st and last el child
+console.log((h1.firstElementChild.style.color = 'white'));
+console.log((h1.lastElementChild.style.color = 'orangered'));
+
+//GOING UPWARDS:(selecting parents)
+//getting direct parent is simlar to childnode
+console.log(h1.parentNode); //<div class="header__title"></div>
+//h1 is inside of the header-title so this is the direct parent, there is also the parentElement in this
+//case it is same
+console.log(h1.parentElement); //<div class="header__title"></div>
+
+//most of the time we need a parent el which is not a direct parent, or we might need to find a parent el
+//no matter how far away it is in the dom, for that we have a closest method
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+//lets say that on a page we had multiple headers so multiple el's with a class of header, but for some reason
+//we only wanted to find the one that is the parent el of h1, so for that we can use closest
+//closest method receives a query string just like querySelector
+
+//if this selector here matches the el on which we are calling we're calling closest, then that actually the
+//el that gonna be returned
+console.log((h1.closest('h1').style.color = 'red'));
+
+//closest is opp of queryselector, so both receive a query string as an i/p, but queryselector finds children
+//no matter how deep in the dom tree while the closest finds parents
+
+//GOING SIDEWAYS(slecting sibilings):
+//we can only access direct sibilings, so only the previous and next one
+console.log(h1.previousElementSibling); //null, because there is nothing there, this is the 1st child of
+//this parent el
+console.log(h1.nextElementSibling); //<h4>A simpler banking experience for a simpler life.</h4>
+
+console.log(h1.previousSibling); //text
+console.log(h1.nextSibling); //text
+
+//if we really need all the sibilings and not just the previous and next ones, then we can use the trick
+//of moving up to the parent el and then read all of thechildren from them
+console.log(h1.parentElement.children); //HTMLCollection(4) [h1, h4, button.btn--text.btn--scroll-to, img.header__img]
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) el.style.transform = 'scale(0.5)';
+});
+*/
+
+//-----------------------------------------------------------------------------
+//194: BUILDING A TABBED COMPONENT:
+/*
+//in this we gonna build tabbed componenet, a tabbed component can appear in many diff ways, but what they
+//all have in common is that they have some kind of tabs like these and when we click a tab then the content
+//of the area below will change
+
+//the whole tabbed component is called operations, then we have a tab container
+
+//tabbed component:
+//we start by selecting the tabs
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+//adding event handlers to buttons
+// tabs.forEach(t => t.addEventListener('click', () => console.log('tab')));
+
+//using event delegation, for event delegation we need to attach event handler on the common parent
+//el of all the el's, n our case this is tab container
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+  console.log(clicked);
+
+  //if we click on container then we get a null because container did have any parent el with operations tab
+  //so all we need is to baiscally ignore any clicks where the result is then null
+
+  //GUARD CLASS:it is basically an if statement which will return early if some condition is matched, in
+  //this case clicked is null which is a falsy value, then falsy we become true and the fn will return
+  //and none of the code that;s after it will be executed
+
+  if (!clicked) return;
+  //when we click one of them then others should put down, so before adding this class we have to remove
+  //in all of the tabs
+  //remove the active classes
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  clicked.classList.add('operations__tab--active');
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  //active tab
+  //activating content area: the info about which content area should be displayed is in the data attribute
+  console.log(clicked.dataset.tab);
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+//in the button we have span el so even though we click on the button we get span el so we are not atually
+//clickng on the btn but we still need the btn, we need a way of selecting the parent el, that is always a tab
+*/
+
+//-----------------------------------------------------------------------------
+//195: PASSING ARGUMENTS TO EVENT HANDLERS:
+/*
+//creating a nice effect on page navigation where all the links fade out when hover on one of them excpet
+//for the link that we actually hovered over
+//menu fade animation
+const handleHover = function (e) {
+  //we need to match the el that we are looking for
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    //selecting the sibiling el's, we can do that bu going to the parent el and then selecting the children
+    //from there, in this case the parent el of nav__link is the nav__item, so the only thing the nav__item
+    //includes is always just one link, now we have to move up manually not just once but twice, so instead
+    //of doing that we will again use the closest method instead of moving up manually  we can simply search
+    //for a parent which matches a certain query, lets use nav even thought this is the not the closest parent
+    //and from there we can search for nav__link
+    const sibilings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+    sibilings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+// nav.addEventListener('mouseover', function (e) {
+//   handleHover(e, 0.5);
+// });
+
+// nav.addEventListener('mouseout', function (e) {
+//   handleHover(e, 1);
+// });
+
+//we can actually do better by using a bind method,
+//BIND: bind method creates a copy of the fn that called on
+//and it will set the this keyword in this fn call to whatever value that we passed into bind, BIND
+//returns a new fn, in this fn the this varibale will now set to 1 value
+
+//passing argument into handler
+nav.addEventListener('mouseover', handleHover.bind(1));
+nav.addEventListener('mouseout', handleHover.bind(0));
+
+//how do we actually use this handleHover fn, usually when we have the event handler as a separate fn all
+//we do is to pass in that fn, but as the pblm is we have to pass in the values into this handleHover fn
+//we need to tell this fn to use opacity of 0.5 in one case and 1 in other case, also we need a way of passing
+//this event nav.addEventListener('mouseover', handleHover(e,0.5)); this wont work e is not defined
+//addeventListener expects a fn here, so we need to pass a fn but if we call the fn, then all of this will
+//become some other value in this case unedfined, because we dont return anything, we still have a call back
+//fn here and then in here we could hen actually call this fn with the event and opacity
+// //nav.addEventListener('mouseover', function (e) {
+//   handleHover(e, 0.5);
+// });
+//this works because we calling the fn manually, so this will be only executed as soon as js executes this
+//fn value
+*/
+
+//-----------------------------------------------------------------------------
+//196: IMPLEMENTING A STICK NAVIGATION: THE SCROLL EVENT
+/*
+//we make navigation sticky by adding sticky class whenever we reach a certain position
+
+//stciky navigation
+const initialCoords = section1.getBoundingClientRect();
+console.log(initialCoords);
+//DOMRect {x: 0, y: 523, width: 1440, height: 1599.1953125, top: 523, …}
+//we get the current top value of the section
+
+//to implement this we use the scroll event for now, the scroll event is available in window
+window.addEventListener('scroll', function (e) {
+  console.log(window.scrollY);
+  if (window.scrollY > initialCoords.top) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+});
+//this event will be fired of each time that we scroll on our page, so scroll event is not really efficient
+//lets start by getting our current scroll position
+//console.log(window.scrollY); this scroll position is really on the window obj and not at the event
+
+//to make the navigation sticky we will add that stciky class , but when exactly should the navigation
+//actually become sticky, it should happen as soon as we reach the 1st section
+*/
+
+//-----------------------------------------------------------------------------
+//197: BETTER WAY: INTERSECTION OBSERVER API:
+/*
+//INTERSECTION OBSERVER API: this api allows our code to basically observe changes to the way that a certain
+//target el, intersects another el, or the way it intersects viewport
+
+//to use the intersection observer api, we need to start by creating a new intersection observer and the
+//we have to pass in a callback fn and then obj of options
+// const observerCallback = function (entries, observer) {
+//   //this callback fn will get called each time that the observed el, so our target el is interacting the
+//   //root el at the threshold that we defined, this fn is called with 2 arguments entries and observer obj
+//   //itself, now we can have multiple thresholds, these entries are an array of threshold entries
+//   entries.forEach(entry => {
+//     console.log(entry);
+//     //IntersectionObserverEntry {time: 210.80000001192093, rootBounds: DOMRectReadOnly, boundingClientRect: DOMRectReadOnly, intersectionRect: DOMRectReadOnly, isIntersecting: false, …}
+//     //we already get an intersection observer entry, when we start scrolling we got a 1st real entry which
+//     //appeared here because our targte el came into the vireport, so our targte el is this whole h1 that
+//     //it start intersectnig the view port, and our oberver is observing that and here we see that the inter
+//     //secrion ratio at the time that this callback here was called was at 0.10 and that is exactly the 10%
+//     //threshold, we also get this isIntersecting prop which in this case is true because our target, so
+//     //again this whole section here is now intersecting the viewport, and we are looking for the viewport
+//     //beacuse we set the root to null, when we scroll down and up again we will get a new entry again it
+//     //should be close to 10%, but now it happned as we are moving up again it was 10% but now, it is no
+//     //longer intersecting, it is not intersecting because the threshold is at 10 and so now less than 10%
+//     //basically our target el here is inside of the root so inside of viewport now still moving down we get
+//     //another one and now it is back to not intersecting, because now we no longer have 10% visible
+//   });
+// };
+// const observerOptions = {
+//   root: null,
+//   //now we will be able to observe our target el intersecting the viewport,
+//   threshold: [0, 0.2],
+// };
+// //this obj needs a root property, and this root is the el that the target is intersecting, second is a threshold
+// //this is basically the precentage of intersection at which the observer callback will be called
+
+// //0 % menas that our callback will trigger each time that the target el moves completely out of the view, and
+// //also as soon as it enters the view now besides there is 1 that means callback will only be called
+// //when 100% target is actually visible in the viewport
+
+// //now we can see that the intersection is exactly 0, but it is already intersecting, because the threshold herr
+// //was already passed
+
+// const observer = new IntersectionObserver(observerCallback, observerOptions);
+// //now we have to use this observer to observe a certain target, so observer and a method we call on that
+// //observe and then the target el
+// observer.observe(section1);
+
+//we want naviagtion when the header is moves completely out of view
+
+const navHeight = nav.getBoundingClientRect().height;
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+const header = document.querySelector('.header');
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
+*/
+
+//-----------------------------------------------------------------------------
+//198: REVEALING ELEMENTS ON SCROLL:
+//this time we gonna reveal el's when we scroll close to them
+//remove section--hidden this class as we approach ecah of these sections
+//reveal sections
+/*
+const allSections = document.querySelectorAll('.section');
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+//we want to oberve all the 4 sections in this case, we can do by selecting all the sections
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+*/
+
+//-----------------------------------------------------------------------------
+//199: LAZY LOADING IMAGES:
+/*
+//images has by far biggest imapct on page loading it is very imp that images are optimized on any page, for that
+//we can use a strategy called lazy loading images, as we scroll to one of these low resolutions imgs
+//we will then  replace this low res img with the one we specified in the data-serc attribute, we then also
+//remove the class lazy-img which makes the img blurred
+
+//lazy loading images
+const imgTargets = document.querySelectorAll('img[data-src]');
+//console.log(imgTargets);
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  //console.log(entry);
+  if (!entry.isIntersecting) return;
+
+  //replace src attribute with data.src
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+imgTargets.forEach(img => imgObserver.observe(img));
+*/
+
+//-----------------------------------------------------------------------------
+//200: BUILDING A SLIDER COMPONENT:
+/*
+//on each of this slide we need to set this trabsform prop to these percentages
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+let currentSlide = 0;
+const maxSlide = slides.length;
+//putting all slides side by side
+const slider = document.querySelector('.slider');
+slider.style.transform = 'scale(0.4) translateX(-800px)';
+slider.style.overflow = 'visible';
+
+//0%,100%,200%,300%, the 1st slide should be at 0, 2nd at 100 ...
+//this is bcox translateX will move them to poistion 100% so the width of each of thses images is 100%, so
+//the 2nd img will start right here at the end of the 1st one, so in the beginning the i will be 0,
+
+//to go to the next slide, going to the next slide is basically simply changing the value here in the transform
+//prop so this translateX, all we do is to change the percentages, so that basically the slide that we want to
+//move to is the one that has 0 %, in ghe beginning we are at slide 0, but then when we want to go to the
+//next slide we need to increase that
+
+const goToSlide = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+  );
+};
+goToSlide(0);
+//next slide
+const nextSlide = function () {
+  if (currentSlide === maxSlide - 1) {
+    currentSlide = 0;
+  } else {
+    currentSlide++;
+  }
+  goToSlide(currentSlide);
+};
+const prevSlide = function () {
+  if (currentSlide === 0) {
+    currentSlide = maxSlide - 1;
+  } else {
+    currentSlide--;
+  }
+
+  goToSlide(currentSlide);
+};
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
+*/
+
+//-----------------------------------------------------------------------------
+//201: BUILDING A SLIDER COMPONENT 2:
+//attcahing event handler to a keyboard evnets so taht we can also slide through the slider uaing the left
+//arrow and right, we catuakly handle the keyboard events right at the docuemnt
+// document.addEventListener('keydown', function (e) {
+//   console.log(e);
+//   if (e.key === 'ArrowLeft') prevSlide();
+//   e.key === 'ArrowRight' && nextSlide();
+// });
+// const dotContainer = document.querySelector('.dots');
+// const createDots = function () {
+//   slides.forEach(function (_, i) {
+//     dotContainer.insertAdjacentHTML(
+//       'beforeend',
+//       `<button class = "dots__dot" data-slide ="${i}"></button>`
+//     );
+//   });
+// };
+// createDots();
+// const activateDots = function (slide) {
+//   document
+//     .querySelectorAll('.dots__dot')
+//     .forEach(dot => dot.classList.remove('dots__dot--active'));
+//   document
+//     .querySelector(`.dot__dot[data-slide = "${slide}"]`)
+//     .classList.add('dots__dot--active');
+// };
+
+// dotContainer.addEventListener('click', function (e) {
+//   if (e.target.classList.contains('dots__dot')) {
+//     const { slide } = e.target.dataset;
+//     goToSlide(slide);
+//   }
+// });
+
+//-----------------------------------------------------------------------------
+//202: LIFECYCLE DOM EVENTS
+/*
+//couple of diff events thta occur in our DOM during a webpage's life cycle, when we say life cycle,
+//we mean right from the moment that the page is 1st accessed, until the user leaves it
+
+//1)DOM CONTENT LOADED: this event is fired by the document as soon as the HTML is completed parsed, which
+//means the HTML has been downloaded and been converted into dom tree, also all scripts must be downloaded
+//and executed before the DOM content loaded event can happen
+//we can listen to that event, and since it happens on the document, we call on document and then name of the
+//event
+
+//this event does not wait for the imgs and other external resources to load, so just HTML and JS need to
+//be loaded
+document.addEventListener('DOMContentLoaded', function (e) {
+  console.log('HTML is parsed and DOM tree is built', e);
+});
+//with this here we can now execute the code that should only be executed after the DOM is available,
+
+//we want all our code to be executed after the DOM is ready
+//the script tag in out html page is at last, so basically the last thing that is going to be read in the
+//HTML, and so basically the browser will only find our script when the rest of the HTML is alresdy parsed
+//so when we have script tag at the end of the HTML, then we do not need to listen for the DOM content loaded
+//there are also other ways of loading the js files
+
+//2)LOAD EVENT: is fired by the window, as soon as not only the HTML is parsed, but also the imgs, external
+//resources like css are also loaded, so basically when a complete page has finished loading
+window.addEventListener('load', function (e) {
+  console.log('page fully loaded');
+});
+
+//3)UNLOAD EVENT: this is created immediately before the user is about to leave a page ex after clicking the
+//close btn in the browser tab, we can use this event to ask users if they are 100% sure thta they want to
+//leave the page
+// window.addEventListener('beforeunload', function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = '';
+// });
+*/
+
+//-----------------------------------------------------------------------------
+//203: EFFICIENT SCRIPT OADING: DEFER AND ASYNC
+//DIFF WAYS OF LOADING A JS IN HTML
+
+//1)till no we used a regular way of using a js file into our HTML
+//<script src ="script.js>"
+
+//2)however we can also add async attribute
+//<script async src ="script.js>
+
+//3)however we can also add defer attribute
+//<script defer src ="script.js>
+
+//these attributes gonna influence the way in which the js file is fetched, which basically means download
+//and then execute
+
+//in the html we can write script tag in the document head or usually at the end of the body
+//DOCUMENT HEAD
+//<script src ="script.js>"
+//when we include a script without any attribute, in the head, as the user loads the page and receives HTML
+//the HTML code will start to be parsed by the browser and parsing the HTML is basically building the dom tree
+//from the from the HTML el's, then at a certain point, it will find a script tag, start to fetch the script
+//and then execute, during all this time, the html parsing will actually stop, so it will be waiting for
+//the script to get fetched and executed, only after that the rest of the HTML can be parsed, and at the end
+//of that parsing, the DOM content loaded  event will finally fired, this is not ideal at all, we dont want
+//the browser to be just sitting there nothing do anything, because this can have a huge impact on the
+//pages performance, in this case the script will actually executed before the DOM is ready
+//PARSING HTML => (FETCH SCRIPT + EXECUTE) WAITING => FINISH PARSING HTML(dom content loaded)
+
+//END OF THE BODY:
+//we usually put the script tag at the end of the body, so that all the HTML is already parsed, when it
+//finally reaches the script tag, so inthis situation, this is how the page loading looks like
+//PARSING HTML                  => FETCH SCRIPT + EXECUTE
+
+//the script could have been downloaded before, while the HTML is still being parsed
+
+//WITH ASYNC ATTRIBUTE AT HEAD:
+//PARSING HTML (FETCH SCRIPT) =>EXECUTE(WAITING) => FINISH PARSING HTML
+//the script is loaded at the same time as the HTML is parsed, so in asynchronous way, however the html
+//parsing still stops for the script execution, so the script is downloaded asynchronously, but then its
+//executed right away in a synchronous way, and so the html code has to wait fro being parsed, this makes
+//page loading time shorter
+
+//WITH DEFER ATTRIBUTE AT HEAD:
+//PARSING HTML  FETCH SCRIPT        => EXECUTE
+//the script is loaded asynchronously but the execution of the script is defered until the end of the html
+//parsing, html parsing is never interuppted, because the script is only executed at the end
+
+//END OF THE BODY
+//PARSE HTML       => FETCH + EXECUTE
+//scripts are fetched and executed after the html is completely parsed
+
+//ASYNC IN HEAD
+//PARSING + FETCH => EXECUTE (WAIT) => PARSING HTML
+//scripts are fetched asynchronoulsy and executed immediately
+//usually dom content loaded content wait for all scripts to execute except for async scripts, so dom content
+//loaded will not wait for script
+//scripts are not guarenteed to be executed in the exact order that they are declared in the code, so the
+//script that arrives 1st gets executed 1st
+
+//DEFER IN HEAD
+//PARSING HTML + FETCH => EXECUTE
+//scripts are fetched asynchronoulsy and executed after html is completely parsed
+//dom content loaded event fires after defer script is executed
+//scrits are executed in the order that they declared
+
+//using defer in the html head is the best sol, so you should use it for your own scripts and for scripts
+//where the order of execution is imp
+
+//----------SECTION 13-----------
+//-----------------------------------------------------------------------------
+//206: WHAT IS OBJECT ORIENTED PROGRAMMING
+//OBJECT ORIENTED PROGRAMMING: is a programming paradigm based on the concept of objects
+//PARADIGM: simply means the style of the code, so how e write and organize code
+
+//we use objects to model, to describe aspects of real world, like a user to-do list item, or even more
+//abstract features like an html component or some kind of data structure,
+
+//objects can contain data, which we call props and also code, (methods), we can say that by using obj's
+//we pack all the data and the corresponding behaviour all into one big block
+
+//in oop obj's are self contained pieces of code or blocks of code like small applications on their own
+//we can use these obj's as building blocks of our applications and make obj's interact with other obj's
+
+//these interactions happen through a so-called public interface, which we also called API, this interface
+//is basically a bunch of methods that a code outside of the obj's can access and that we use to communicate
+//with the obj
+
+//WHY OOP EXIST:this was developed with the goal of organizing code, so to make it flexible and easier to
+//maintain, so before oop we might have a bunch of codes gathered across mutilple fn's are even in the
+//global scope without any structure, in this particular crazy style of code, kit makes it very hard to maintain
+//large code bases and let alone, add new functionalities to it, so the idea of oop was basically created
+//as a sol to this pblm
+
+//OOP is not the only way of wrting organized and maintainable code, there are many other paradigms and one
+//of them is functional programming
+
+//FUNCTIONAL PROGRAMMING: allows us to acheive the exact same goal of avoiding the crazy code
+
+//in OOP we need a way to generateso to create new obj's from our code, and to that in traditional oop
+//we use classes
+
+//CLASSES:is a blueprint which can then be used to create new obj's, it is just like an architecture where
+//the architect develops a blueprint to exactly plan and describe a house, but the blueprint is really just
+//an abstracted plan, like a set of rules but nothing tangable that you can actually touch, however from that
+//blueprint, many real houses can then built in the real world
+
+// user {
+//     user
+//     password
+//     email
+//     login(password){
+//         //login logic
+//     }
+//     sendMesg(str){
+//         //sending logic
+//     }
+// }
+
+//js doesn not actually support real classes, we can see it describes a user who has username,pswrd etc..,
+//it is description of data abt a user, but it is not the data, we then have a behaviour assosciated with
+//data, this class has everything related to user so data and behaviour all packed into one nice self
+//contained blocks
+
+//using this class and create a new obj
+// user {
+//     user = ''
+//     password = ''
+//     email = ''
+//     login(password){
+//         //login logic
+//     }
+//     sendMesg(str){
+//         //sending logic
+//     }
+// }
+//now we have the real data abt user but not just the description
+
+//we call all objs created through a class instances of a class,
+//INSTANCE: is a real obj that we can use in our code, which was created from a class
+
+//HOW DO WE DESIGN A CLASS?
+//we can create a class by 4 fundamental principles
+//ABSTRACTION, ENCAPSULATION, INHERITANCE, POLYMORPHISM
+
+//ABSTRACTION: is to ignore or to hide details that dont matter, this allows us to get an overview perspective
+///of whatever it is that were implementing instead of messing with details that dont really matter, we create
+//and use abstractions all the time
+
+//when we observe addEventListener fn, do we actually know how does actually works behnd the scenes
+//the low-level details of how exactly it works has been abstracted away from us, we are simply the user,
+//and we can simply use that fn without completely understanding it
+
+//ENCAPSULATION: to keep some props and methods private inside a class, they are not accessable outside of
+//a class, however some methods can be exposed as a public interface, which we called a api, we prevent
+//external code from accidentally manipulating this internal state, state refers to an object data
+
+//INHERITANCE
+//when we have 2 classes and that are closely related, we can have one class inherit from other class, so we
+//will have one parent and one child class, child class then extends the parent class
+//a child class inherit all the methods and props from its parent class, inheritance makes all props and
+//methods of a certain class availabel to a child class, a child class then also have its own methods and props
+
+//POLYMORPHISM: a child class can overwrite a method that it inherited from a parent class
+
+//-----------------------------------------------------------------------------
+//207: OOP IN JAVASCRIPT
+//the process od creating an instance is called instantiation
+
+//HOW OOP WORKS IN JS: in js we have something called prototypes and all objects in js are linked to a certain
+//prototype obj, ecah obj has a prototype
+
+//PROTOTYPE: obj contains methods and props that all the objs thta are linked to that prototype can access
+//and use, this behaviour is called prototypal inheritance
+
+//PROTOTYPAL INHERITANCE:all objs that are linked to a certain prototype obj can use the methods and props
+//that are defined in that prototype, obj inherits methods and props from the prototype
+
+//an instance is inherting a class
+
+//objects delegate behaviour to the linked prototype, a behaviour is just another term for methods
+//ex const num = [1,2,3]
+//num.map(v => v * 2)
+
+//ecah time we use an array method like map, we are able to use thta method because of prototypal inheritance
+//for every array method there is array.prototype.map
+//array.prototype is the prototype obj of all the array methods that we create in js, this prototype obj
+//contains all the array methods including map, so this is actually where they are defined, so since
+//array.prototype is the prototype of the num array, it means that num is linked to that prototype, so
+//it has access to all methods that are defined in that prototype obj,
+
+//our array inherits the map method, we can also say that the array delegated the behavior of mapping to its
+//prototype, map method is actually not defined on the num array itself but on its prototype
+
+//HOW DO WE CREATE PROTOTYPES?HOW DO WE LINK OBJECTS TO PROTOTYPES? HOW CAN WE CREATE NEW OBJECTS
+//in js there are actually 3 diff ways of doing all this
+//CONSTRUCTION FN, ES6 CLASSES, AND OBJECT.CREATE
+
+//CONSTRUCTION FN: are a way of creating obj's programatically using a fn
+//which will also sets the new objects prototype, this is how built-in objects like arrays, maps or sets
+//are implemeted
+
+//ES6 CLASSES:more modern way of doing oop in js, they are instead a so-called synthetic sugar over constructor
+//fn's, es6 classes are basically just a layer of abstraction over constrcutor fn's, es6 classes are actually
+//implemented with constructor fn's, they also use prototypal inheritance
+
+//OBJECT.CREATE():easiest and most straight forward way of linking an obj to a prototype obj
+
+//-----------------------------------------------------------------------------
+//208: CONSTRUCTION FUNCTIONS AN DTHE NEW OPERATOR:
+/*
+//CONSTRUCTOR FN'S: we can use these fn's to build an obj using the function, a constructor fn is actually
+//a completely a normal fn, the only diff b/w regular and constructor fn is that we call a constructor fn
+//with a new operator, in oop there is a convention that constructor fn always starts with a capital letter
+//an arrow fn will not work as a fn constructor, because it doesn not have own this keyword, this fn basically
+//produces an obj i this case for a Person, so we want a person to have a firstname, and a birthyear
+const Person = function (firstName, birthYear) {
+  //instance properties
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+
+  this.calcAge = function () {
+    console.log(2037 - this.birthYear);
+  };
+};
+const jonas = new Person('jonas', 1991);
+console.log(jonas); //Person {firstName: 'jonas', birthYear: 1991}
+//we call the constructor with the new keyword, this new opertaor is a very special operator, wjat it does
+//here is to call the fn, but it does lot more
+
+//WHEN WE CALL A FN WITH NEW OPERATOR:
+//behind the scenes, there are 4 steps
+
+//1)A new empty object is created {}
+//console.log(this); //Person {}, so what ever we add to that empty obj will then be returned from the
+//fn, and that returned obj is going to be the obj that we are trying to build
+
+//2) the fn is called and in this fn call the this keyword is always set to the newly object created
+//this =  {}, in the execution context of the Person fn the this keyword will point to this new obj that
+//was created in step1
+
+//so taking that 1st parameter, so the value we recieved and then create a prop on the this keyword with the
+//same name and then set it to that value
+//3)this newly created obj is linked to a prototype
+//4)the obj that was created in the beginning is then automatically returned from the constructor fn
+// this.firstName = firstName;
+//   this.birthYear = birthYear;
+//console.log(jonas);//Person {firstName: 'jonas', birthYear: 1991}
+
+//we can use this constructor fn to create as many different objects as we want
+const Matilda = new Person('matilda', '1994');
+const jack = new Person('jack', 1975);
+console.log(Matilda, jack);
+//Person {firstName: 'matilda', birthYear: '1994'} Person {firstName: 'jack', birthYear: 1975}
+
+//we did create an obj from a constructor fn, constructor fn's have been used since the beginning of js
+//to kind of simulate classes, therefore we can still say thta jonas here is an instance of Person
+
+//THERE IS AN OPERATOR TEST IF THE OBJECT IS AN INSTANCE OF CONSTRUCTOR FN
+console.log(jonas instanceof Person); //true
+
+//we can also say these props that are inside of a constructor fn as instance properties, because the props
+//in the Person fn will be available on all the instances that are created through this constructor fn
+//what if we want to add methods to our objects, just as we added props we can also add methods
+// this.calcAge = function () {
+//     console.log(2037 - this.birthYear);
+//   };
+//this works fine but a really a bad practice, we should never create a method inside of a constructor fn
+//because imagine we were gonna create a 100 or 1000 objects using this constructor fn, then  each of
+//these obj's would carry arround this fn here so if we had a 1000 obj's we would essentailly create 1000
+//copies of this fn, to solve this pblm we are gonna use prototypes and prototypal inheritance
+*/
+
+//-----------------------------------------------------------------------------
+//209: PROTOTYPES:
+/*
+const Person = function (firstName, birthyear) {
+  //instance properties
+  this.firstName = firstName;
+  this.birthyear = birthyear;
+  // this.calcAge = function(){
+  //     console.log(2037 - this.birthyear)
+  // }
+};
+const jonas = new Person('jonas', 1991);
+console.log(jonas); //Person {firstName: 'jonas', birthyear: 1991}
+const matilda = new Person('matilda', 1994);
+const jack = new Person('jack', 1991);
+console.log(matilda, jack);
+//Person {firstName: 'matilda', birthyear: 1994} Person {firstName: 'jack', birthyear: 1994}
+console.log(jonas instanceof Person); //true
+
+//Prototypes: each and every fn in js automatically has aproperty called prototype, and that includes construcor
+//fn's
+//every obj thta is created by a certain constructor fn will get access to all methods and props that we
+//define on the constructors prototype property
+
+//prototype property of the constructor fn, all the obj's taht are created through this constructor fn
+//will inherit, so they will get access to all the methods and prop's that are defined on this prototype
+//property, so lets add method to this prototype property
+
+console.log(Person.prototype); //{constructor: ƒ} we already have calcAge prop in their, before it was a lind
+//of empty obj but now there is a calcAge method
+//this is now obj Person.prototype
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthyear);
+};
+
+//ecah obj created by this constructor fn will now get access to all the methods of this prototype property
+jonas.calcAge(); //46
+matilda.calcAge(); //43
+jack.calcAge(); //43
+//we can use this method here on the jonas obj even though it is not really on the jonas obj itself, and
+//this keyword in ecah of them is always set to the obj that is calling the method
+
+//the this keyword is set to the object that is calling the method
+
+//matilda and jonas are somehow connected to the Person, thta is why they can have access to these methods
+//that is loacred inside of the proptotype property of person
+
+//HOW AND WHY DOES THIS WORKS?
+//it works because any obj always has access to the methods and properties from its prototype, and the prototype
+//of jonas and matilda is Person.prototype we can confirm that because each obj has special prop called
+//__proto__
+console.log(jonas.__proto__); //{calcAge: ƒ, constructor: ƒ} this is the prototype of jonas it is not the
+//prototype property, here again we see calcAge fn and that is why jonas is able to use this
+//the prototype of the jonas obj is essentailly the prototype property of the constructor fn
+console.log(jonas.__proto__ === Person.prototype); //true
+
+//Person.prototype is not the prototype of Person, it is gonna be used as the prototype of all the objects
+//that are created with the person constructor fn
+
+//so on any obj we can test if this is a prototype of another obj
+console.log(Person.prototype.isPrototypeOf(jonas)); //true
+console.log(Person.prototype.isPrototypeOf(matilda)); //true
+console.log(Person.prototype.isPrototypeOf(Person)); //false
+
+//where does this __proto__ property on the jonas obj come from?, the new operator in 3rd step will links
+//the empty new obj to the prototype, it creates this __proto__ property and it sets its value to the
+//prototype property of the fn that is being called, it sets the prototype property on the obj to the
+//prototype property of the constructor fn, this is how js know internally that jonas obj is connected
+
+//WE CAN ALSO SET PROPERTIES ON PROTOTYPE NOT JUST METHODS:
+Person.prototype.species = 'homo sapeins';
+console.log(jonas); //not directly here but on the prototype property
+console.log(jonas.species, matilda.species);
+//this property is not directly on the obj, this is not its own property, own properties are the only ones
+//that are declared directly on the obj itself, not including the inherited properties
+console.log(jonas.hasOwnProperty('firstName')); //true
+console.log(jonas.hasOwnProperty('species')); //false
+*/
+
+//-----------------------------------------------------------------------------
+//210: PROTOTYPAL INHERITANCE AND THE PROTOTYPE:
+/*
+//evewrthing starts with the construction fn that we created
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+//now this constructor fn has a prototype property which is an obj and inside that object, we defined the
+//calcAge method and Person.prototype itself also has a reference back to the person which is the constructor
+//property, so essentially Person.prototype.constructor is going to point back to the Person itself
+//[Person.prototype](calcAge fn)
+//Person.prototype is actually not the prototype of the Person but of all the obj's that are created through
+//the person fn
+
+const jonas = new Person('jonas', 1991);
+//when we call a fn with new operator the 1st thing that is gonna happen is that a new empty obj is created
+//then the this keyword in the fn call is set to the newly created obj, so inside the n's execution context
+//this is now new empty obj, now the new obj is linked to the constructors prototype property, in this case
+//Person.prototype this happens internally by adding the __proto__ to the new obj, so Person.prototype is
+//now the new objects prototype, __proto__ always points to an obj prototype, and finally the new obj is
+//automatically returned from the fn
+jonas.calcAge();
+
+//here we are attempting to call the calcAge fnon the jonas obj however js cannot find the calcAge method
+//on the jonas obj, it is simply not there, if a property or a method is not found in a certan method
+//js will look into its prototype and there it is, so there is a calcAge fn that we are looking for, and
+//js will use that one, this is called prototypal inheritance
+
+//PROTOTYPAL INHERITANCE: jonas obj inherited the calcAge method from its prototype, or it delegated the
+//calcAge functionality to its prototype, now we can create as many person objs as we like and all of them will
+//inherit his method
+
+//the fact that jonas obj is connected to a prototype and the ability of looking up methods and properties
+//in a prototype is called prototypal chain, so the jonas obj and its prototype  basically form a prototype
+//chain
+
+//we hav the person fn and its prototype property, and the jonas obj linked to its prototype via the__proto__
+//Person.prototype itself is also an obj and all obj in js have a prototype, so this Person.prototype also
+//have a prototype and the prototype of Person.prototype is Object.prototype
+//Person.prototype is just a simple obj, it has been built in object constructor fn and this is actually the
+//fn taht is called behind the scenes when ever we create an obj literal
+
+//Object.prototype is usually the top of the prototype chain which means its prototypr is null which is the end
+//of the prototype chain
+
+//in scope chain when ever the js cant find a certain variable in a certain scope, it looks up in the next
+//scope in the scope chain and tries to find out the var on the othe hand in the prototype chain whenever js
+//cant find a certain property or method in a certain obj its gonna look up into the next prototype in the
+//prototype chain and see if it can finfd there
+
+//another ex of method lookup, to do taht we have a hasOwnProperty method  on the jonas object
+*/
+
+//-----------------------------------------------------------------------------
+//211: PROTOTYPAL INHERITANCE ON BUILT IN OBJECTS:
+/*
+const Person = function (firstName, birthyear) {
+  //instance properties
+  this.firstName = firstName;
+  this.birthyear = birthyear;
+};
+const jonas = new Person('jonas', 1991);
+const matilda = new Person('matilda', 1994);
+console.log(jonas); //Person {firstName: 'jonas', birthyear: 1991}
+console.log(matilda);
+
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthyear);
+};
+
+console.log(jonas, matilda);
+matilda.calcAge(); //43
+jonas.calcAge(); //46
+
+console.log(jonas.__proto__);
+console.log(jonas.__proto__ === Person.prototype); //true
+
+console.log(Person.prototype.isPrototypeOf(jonas)); //true
+console.log(Person.prototype.isPrototypeOf(matilda)); //true
+console.log(Person.prototype.isPrototypeOf(Person)); //flase
+
+Person.prototype.species = 'homo sapiens';
+console.log(jonas.species, matilda.species);
+
+console.log(jonas.hasOwnProperty('firstName')); //true
+
+console.log(jonas.hasOwnProperty('species')); //true
+
+console.log(jonas.__proto__); //{species: 'homo sapiens', calcAge: ƒ, constructor: ƒ}
+console.log(jonas.__proto__.__proto__); //{constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+console.log(jonas.__proto__.__proto__.__proto__); //null
+
+console.dir(Person.prototype.constructor); //fn itself ƒ Person(firstName, birthyear)
+
+//PROTOTYPE OF ARRAY:
+const arr = [3, 6, 4, 5, 6, 9, 3]; // this is same as new Array === []
+console.log(arr.__proto__); //[constructor: ƒ, at: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, …]
+//all the arrays get access to all of these methods, each array does not contain all of these methods, but
+//instead each array will inherit these methods from its prototype, Array is the constructor fn
+console.log(arr.__proto__ === Array.prototype); //true
+//the prototype property of the constructor fn is gonna be the prototype of all the obj taht are created
+//by that constructor
+
+//whenever we create an array, it is indeed created by the array constructor
+console.log(arr.__proto__.__proto__);
+//any array inherits all the methods frmo its prototype
+
+//here we can add any method to this prototype and all the array methods will inherit it, lets say we want
+//to create a method that returns all the unique el's of an array, and to get the unique el's we create a set
+
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+};
+
+//this is the keyword on which this method is called and now we put this into an array and spread it
+console.log(arr.unique()); //(5) [3, 6, 4, 5, 9]
+
+//extending the prototype of a built-in obj is not a good idea
+
+const h1 = document.querySelector('h1');
+//all the dom el's behind the scens are objects, the prototype is
+//[[Prototype]]:HTMLHeadingElement,HTMLElement,Element, Node,EventTarget,object
+*/
+//-----------------------------------------------------------------------------
+//212: CODING CHALLENGE 1:
+
+//-----------------------------------------------------------------------------
+//213: ES6 CLASSES:
+/*
+//classes in js do not work like traditional classes, instead classes in js are just syntactic sugar over
+//constructor fn's, they still implement prototypal inheritance behind the scens but with a syntax that is more
+//sense
+
+//Implementing Person using a class, this is a class declaration just like fn's classes also expressions
+//this is beacuse classes are just like a fn's, classes behind the scenes works as fn's
+//class expression:
+//const PersonCls = class {};
+
+//class declaration: the 1st thing we have to do inside the class is to add the constructor method just like
+//constructor() and this constructor actually works in a pretty similar way as a constructor fn, but this
+//one is actually a method of this class, just like in construyctor fn's we pass arguments for the properties
+//that we want the obj to have, now the act of creating a new obj actually also works the exact same as before
+//so using the new operator, so whenever we create a new obj, so like a new instance using the new operator
+//this constructor will automatically be called, it just looks like a regular fn call, and we also use the
+//new keyword, the this keyword here in this constructor will also be set to the newly created empty obj
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  //methods will be added to .prototype property
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`hey ${this.firstName}`);
+  }
+}
+const jessica = new PersonCl('Jessica', 1991);
+
+//when we create a new instance , then it is this constructor that is gonna be called and that will return a
+//new obj and that will be stored in the jessica
+console.log(jessica); //PersonCl {firstName: 'Jessica', birthYear: 1991}
+
+//an for methods we simply write them in the class, all we have do is write their name just like a regular
+//fn
+
+//all of the methods that we write inside a class, so outside of a constructor will be on the prototype of
+//the obj's and not on the obj's themselves
+jessica.calcAge(); //46
+console.log(jessica.__proto__ === PersonCl.prototype); //true
+
+//we can also add a method manually to the prototype
+// PersonCl.prototype.greet = function () {
+//   console.log(`hey ${this.firstName}`);
+// };
+jessica.greet(); //hey Jessica
+
+//1)classes are not hoisted and so even if they are class declarations, fn declarations are hoisted it means we
+//can use them before they are declared in the code
+
+//2)like fn's classes are also first class citizens, it means we can apss them into fn's and also return
+//them from fn's, becoz classes are special type of fn's
+
+//3)the body of the class is always executed in the strict mode, even if we did'nt activate if for our entire
+//script, all the code taht is in the class will be executed in the strict mode
+*/
+
+//-----------------------------------------------------------------------------
+//214: SETTERS AND GETTERS:
+/*
+//every obj in js can have setter and getter properties, and we call these special properties assessor
+//properties, while the more normal props are called data props, getters and setters are basically fn's
+//that get and set a value, so just as a name says that, but  on th eoutside they still look like regular
+//props
+const account = {
+  owner: 'jonas',
+  movements: [200, 530, 120, 300],
+  //we want a method to get the latest movement and to transform this to a getter we simply prepend get
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+  //set latest again, we can basiaclly add a new movement here, any setter method needs to have exactly
+  //one parameter
+  set latest(mov) {
+    this.movements.push(mov);
+  },
+};
+//we can use this getter like this but latest just as a property, we dont call the method but instead we
+//write it as if it is a property
+console.log(account.latest); //300
+//this can be v);
+
+//but now this is actually like a property, so we can simply set it by
+account.latest = 50;
+console.log(account.movements); //(5) [200, 530, 120, 300, 50]
+
+//Classes do alos have getters and setters
+
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+  //Instance methods
+  //methods that would be added to the prototype prop, so that all intances have access to them
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+  greet() {
+    console.log(`hey ${this.fullName}`);
+  }
+  //getter for the age property
+  get age() {
+    return 2037 - this.birthYear;
+  }
+  //we are creating a setter for a property name that does already exist, now each time the above code is executed
+  //so whenever we set a fullname on this keyword, then this method here (set) so this setter is gonna be
+  //executed and so that name we pass in as fullName will then become this name,
+  //set a property that already exist
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a fullname`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+  //static method
+  static hey() {
+    console.log('hey there');
+    console.log(this);
+  }
+}
+const jessica = new PersonCl('jessica davis', 1991);
+console.log(jessica); //PersonCl {firstName: 'jessica', birthYear: 1991}
+jessica.calcAge(); //46
+console.log(jessica.age); //46
+console.log(jessica.__proto__ === PersonCl.prototype); //true
+jessica.greet(); //hey jessica
+console.log(jessica); //PersonCl {_fullName: 'jessica davis', birthYear: 1991}
+console.log(jessica); //PersonCl {_fullName: 'jessica davis', birthYear: 1991}
+//right now the prop that exist is _fullName now if we try to get.fullName we get undefined
+//to fix this we also need to create a getter for the fullName property, that simply return _property
+//now if we try
+console.log(jessica.fullName); //jessica davis
+PersonCl.hey(); //hey there and a Personcl class
+//these static methods are not available on the instances
+
+//const walter = new PersonCl('walter', 1961);
+
+//GETTER: is just like another regular method that we set on the prototype,
+//getters and setters are used for data validation
+//lets try some validation with name, we change the name to full name and now we can create a setter for
+//the fullname property which will check if this is actually a fullname
+
+//we are creating a setter for a property name that does already exist, now each time the above code is executed
+//so whenever we set a fullname on this keyword, then this method here (set) so this setter is gonna be
+//executed and so that name we pass in as fullName will then become this name,
+//there will be a conflict
+//both the setter and constructor fn are trying set the exact same prop name instead in setter we create a
+//new prop name, so when we have a setter which is trying to set a prop that does already exist, then here
+//in set method as a convention we add _ when we are doing this we are actually creating a new variable
+
+//-----------------------------------------------------------------------------
+//215: STATIC METHODS:
+//We have Array.from() method, we can convert any array like structure to a real array
+console.log(Array.from(document.querySelectorAll('h1'))); //[h1]
+//this from method is really a method that is attached to the array constructor, so we could not use the
+//from on an array, from is not a fn, this from method here is arelly attached to the entire constructor
+//and not to the prototype property of the constructor, so therfore all the arrays do not inherit this method
+//because it is not on their prototype, it is simply attached to constructor itself, so Array.from here
+//is basically just a simply fn, but its a fn that's attached to the array constructor, we also say that
+//the from method is in the array name space
+//Number.parseFloat(12)
+//This is another static method and its static on the number constructor so its not avialable on numbers
+//but only on the very constructor
+//we use static methods as helpers, that should be related to a certain constructor
+
+const Person = function (firstName, birthyear) {
+  this.firstName = firstName;
+  this.birthYear = birthyear;
+};
+const jonas = new Person('jonas', 1991);
+
+//to add a static method all we have to do is
+Person.hey = function () {
+  console.log('hey there'); //hey there
+  console.log(this); //is the constructor fn, as that is th eobj calling the method
+};
+//to call this
+Person.hey();
+//this one is not inherited
+//jonas.hey(); //error
+
+//adding a static method on classes is simply we can add just by adding static heyery useful when we want to read something as a prop, but still need to do some calculations
+//we can do same also setter
+
+//if it is a regular method we would do this
+//account.latest(50)
+*/
+
+//-----------------------------------------------------------------------------
+//217: CODING CHALLENGE 2:
+
+//-----------------------------------------------------------------------------
+//218: INHERITANCE BETWEEN CLASSES AND CONSTRUCTOR FUNCTIONS:
+/*
+//INHERIT B/W CLASSES USING CONSTRUCTOR FN'S
+const Person = function (firstName, birthyear) {
+  this.firstName = firstName;
+  this.birthyear = birthyear;
+};
+
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthyear);
+};
+
+//building a constructor fn for a student, usually , we want a child class to have the same functionality
+//as the parent class, but with some additonal functionality, so usually we pass in the same arguments, but
+//then also some addtional ones
+const Student = function (firstName, birthyear, course) {
+  //   this.firstName = firstName;
+  //   this.birthyear = birthyear;
+  Person.call(this, firstName, birthyear);
+  this.course = course;
+  //this student class have the same data as the person class, but with addtional prop
+};
+
+//Student.prototype is now an obj that inherits from person.prototype, we have to create this connetcion here
+//before add any more methods to the prototpe obj of student, because object.create will return an empty obj
+//at this point student.prototype is empty, and so then on this emepty obj we can add methods
+
+//Linking prototypes
+Student.prototype = Object.create(Person.prototype);
+
+//if we do Student.prototype = person.prototype, then we will not end up with a prototype chain that we
+//need, instead we would end up, we are actually saying the students prototype property and person prototype
+//property should be the exact same obj,  what we want is the person prototype obj to be the prototype
+//of student prototype , so we want to inherit from it, but it should not be the exact same obj, that is
+//why we need object.create
+
+Student.prototype.introduce = function () {
+  console.log(`my name is ${this.firstName} and i study ${this.course}`);
+};
+const mike = new Student('mike', 2020, 'computer science');
+console.log(mike); //Student {firstName: 'mike', birthyear: 2020, course: 'computer science'}
+mike.introduce(); //my name is mike and i study computer science
+
+//right now some part of code in student fn is basically a copy of the person fn, we can simply call person fn
+//Person(firstName,birthyear), we are now calling this person constructor fn as a regular fn, so we are not
+//using the new operator to call this person fn, therfore this fn call here in student fn is simply a regular
+//fn in a regular fn, the this keyword is set to undefined, so we get error, instead of simply calling the
+//person fn here we need to manually set the this keyword, we can call the fn and set the this keyword inside
+//that fn, by using the call method
+
+//call method will indeed call this person fn, but we will be able to splecify this keyword here as the 1st
+//argument in the fn, in this case we want the this keyword inside the person fn to simply be the this keyword
+//inside this fn here
+
+//it is simply the student constructor fn and its prototype property, and then the mike obj is linked to
+//its prototype, and that prototype is of course the constrctor fn's prototype property, now this link b/w
+//instance and prototype has been made automatically by creating the mike obj with new operator, now a student
+//is also a person, and so we want student and person to be connected, so we really want the student class
+//to be the child class and inherit from the person class, which will then fn as the parent class so this way
+//all the instances of studentcould also get access to methods from the persons prototype property, its the
+//chilkd class share the behaviour from their parent class, we have to make person.prototype, the prototype
+//of student.prototype, or we want to set the __proto__ property of student prototype to person.prototype
+
+//we have to create this connection manually, so to link these 2 prototypes objects, we will use Object.creat
+//because defining prototypes manually is exactly what object.create does
+mike.calcAge(); //17
+//in this case we know the calcage method is not directly on mike obj, its alos not in mike prototype, that is
+//where we defined the intorduce mthod, but not calcage  whenever we try to access ,method thta is not in the
+//obj's protoype then js will even look further in the prototype chain and see if it can find a method in
+//the parent prototype that is exactly where  happens, so js will find calcage in person.prototype, which
+//is exactly where we defined it, we are now able call a method that is on the person's prototype on a stucent
+//obj
+console.log(mike.__proto__); //Person {introduce: ƒ}
+console.log(mike.__proto__.__proto__); //{calcAge: ƒ, constructor: ƒ}
+console.log(mike instanceof Student); //true
+console.log(mike instanceof Person); //true
+console.log(mike instanceof Object); //true
+
+console.dir(Student.prototype.constructor); //this should point back to student, but here it points back to
+//the person //ƒ Person(firstName, birthyear), js now thinks that student.prototype is person here
+//the reason for that we set the prototype property of student using objcte.create, and so this makes it so
+//that the constructor of student.prototype is still person, so we need to fix it, we can do thta by
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor); //ƒ Student(firstName, birthyear, course)
+*/
+//-----------------------------------------------------------------------------
+//219: CODING CHALLENGE 3:
+
+//-----------------------------------------------------------------------------
+//220: INHERITANCE BETWEEN CLASSES: ES6 CLASSES:
+/*
+class PersonCl {
+  constructor(fullName, birthyear) {
+    this.fullName = fullName;
+    this.birthyear = birthyear;
+  }
+
+  calcAge() {
+    console.log(2037 - this.birthyear);
+  }
+
+  greet() {
+    console.log(`hey ${this.fullName}`);
+  }
+  get age() {
+    return 2037 - this.birthyear;
+  }
+
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  static hey() {
+    console.log(`hey there`);
+  }
+}
+
+class StudentCl extends PersonCl {
+  constructor(fullName, birthyear, course) {
+    //PersonCl.call();
+    //always needs to happen 1st
+    super(fullName, birthyear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`my name is ${this.fullName} and i study ${this.course}`);
+  }
+
+  calcAge() {
+    console.log(`i'am ${
+      2037 - this.birthyear
+    } years old, but as student i feel more like 
+    ${2037 - this.birthyear} + 10`);
+  }
+}
+//const martha = new StudentCl('martha', 2012);
+const martha = new StudentCl('martha jonas', 2012, 'computer science');
+martha.introduce(); //my name is martha jonas and i study computer science
+martha.calcAge(); //25
+
+//to implement inheritance b/w classes we only need 2 ingredients, we need the extend keyword and super fn
+//so to make student class inherit from person class all we need to do is say extends and the parent class
+//we still need a constructor fn, we no need to call PersonCl like constructor fn, instead we call super fn
+
+//SUPER: is basicall a constructor fn of the parent class, in child class this always need to happen 1st
+// super(fullName, birthyear); this call the suoper fn is responsible for creating the this keyword in the
+//sub class
+*/
+
+//-----------------------------------------------------------------------------
+//221: INHERITANCE BETWEEN CLASSES: OBJECT.CREATE:
+/*
+const Personproto = {
+  calcAge() {
+    console.log(2037 - this.birthyear);
+  },
+  init(firstName, birthyear) {
+    this.firstName = firstName;
+    this.birthyear = birthyear;
+  },
+};
+//this will serve as a prototype to create a new person object using Object.create(), so this will basically
+//be our parent class
+const steven = Object.create(Personproto);
+//this obj up here used to be the prototype of all the new person objs, but now we basically want to add
+//another prototype in the middle of the chain, so  b/w personproto and the obj, what we do is to make
+//student inherit directly from the person, now we gonna create an obj that will be the prototype of students
+
+const Studentproto = Object.create(Personproto);
+//this will be for now an empty obj, and prototype will be, Personproto
+//we can use this studentproto to create new students
+// const jay = Object.create(Studentproto);
+//studentprototype obj is now prototype of jay and personproto obj is in turn the prototype of studentproto
+//and so personproto is a parent prototype of jay
+
+//Personproto obj is the prototype of all peson objects, but now using object.create, we make it so that
+//personproto will actually become the prototype of studentproto and what it does is that now basically
+//student inherit from person, now to finish all we have to do is to use object.create but this time to
+//create a new actual student obj and ofcourse we make the student, jay in this case inherit from studentproto
+//which is now jay prototype, jay inherits from studentproto which in turn inherits personproto and therfore
+//jay obj will be able to use all the methods that are contained in studentproto and personproto
+Studentproto.init = function (firstName, birthyear, course) {
+  Personproto.init.call(this, firstName, birthyear);
+  this.course = course;
+};
+
+Studentproto.introduce = function () {
+  console.log(`my name is ${this.fullName} and i study ${this.course}`);
+};
+const jay = Object.create(Studentproto);
+jay.init('jay', 2010, 'computer science');
+console.log(jay); //{firstName: 'jay', birthyear: 2010, course: 'computer science'}
+jay.introduce(); //my name is undefined and i study computer science
+jay.calcAge(); //27;
+*/
+//-----------------------------------------------------------------------------
+//222: ANOTHER CLASS EXAMPLE:
+/*
+class Account {
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.pin = pin;
+    this.movements = [];
+    this.locale = navigator.language;
+    //we can even excute any code here in this constructor that e want
+    console.log(`thanks for opening an account, ${owner}`);
+  }
+
+  //public interface of our obj's
+  deposit(val) {
+    this.movements.push(val);
+  }
+  withdrawal(val) {
+    //we can actually call other method inside of a certain method
+    this.deposit(-val);
+  }
+  approvalLoan(val) {
+    return true;
+  }
+  requestLoan(val) {
+    if (this.approvalLoan(val)) {
+      this.deposit(val);
+      console.log(`loan approved`);
+    }
+  }
+}
+
+const ac1 = new Account('jonas', 'EUR', 1111);
+console.log(ac1);
+//Account {owner: 'jonas', currency: 'EUR', pin: 1111, movements: Array(0), locale: 'en-US'}
+
+//we want to start always with an empty array as the movements and the locale we want to get from the
+//navigator.language, it doesnt make sense to pass in an empty array into all the new accounts that we want
+//to create, we dont need this instaed we can simply do this by adding this.movements = [] as an property
+//we can create even more properties on any instance and properties that are not based on inputs, same
+//we can do for locale
+
+//if we want a deposit
+//instead of interacting a property like this, its a lot better to create a methods that interact with these
+//properties
+// ac1.movements.push(250);
+// //if we want a withdrawal
+// ac1.movements.push(-140);
+ac1.deposit(250);
+ac1.withdrawal(140);
+
+console.log(ac1); //Account {owner: 'jonas', currency: 'EUR', pin: 1111, movements: Array(2), locale: 'en-US'}
+
+//we are actuall using public interface, the deposit and withdrawal methods are the interface to our objects
+//and we also call this api,and this withdrawal here actually abstracts the fact that a withdrawal is basically
+//a -ve movement
+
+console.log(ac1.pin); //1111
+//probably it should be accessable from outside of a class, same goes for methods lets say we have a request
+//loan method fro some val, we could make the apporval of the loan based on some condition and that condition
+//would come from some other method say approvalLoan, in public interface we only want requestloan method
+//so we want to be able to do acc1.requestLoan()
+ac1.requestLoan(1000); //loan approved and pushed into our array, but ofcourse we also able to do
+ac1.approvalLoan(1000); //this ofcourse doesnt do anything but in real world we should'nt even be allowed
+//to access this kind of methods, so this is kind iof an internal method that only requestLoan method
+//should be able to use, we really need data encapsulation and data privacy
+*/
+
+//-----------------------------------------------------------------------------
+//223: ENCAPSULATION:PROTECTED PROPERTIES ND METHODS:
+/*
+class Account {
+  //1)public fields(instances)
+  locale = navigator.language;
+  //2)private fields(instances)
+  #movements = [];
+  #pin;
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+    //protected property
+    //this._movements = [];
+    //this.locale = navigator.language;
+    console.log(`thank you for opening an account ${owner}`);
+  }
+  //public interface
+  getMovements() {
+    return this.#movements;
+  }
+  deposit(val) {
+    this.#movements.push(val);
+    return this;
+  }
+  withdrawal(val) {
+    this.deposit(-val);
+    return this;
+  }
+
+  requestLoan(val) {
+    if (this._approvalLoan(val)) {
+      this.deposit(val);
+      console.log('loan approved');
+      return this;
+    }
+  }
+  //STATIC
+  static helper() {
+    console.log('helper');
+  }
+  //4)PRIVATE METHODS
+  _approvalLoan(val) {
+    return true;
+  }
+}
+const ac1 = new Account('jonas', 'EUR', 1111);
+ac1.deposit(250);
+ac1.withdrawal(140);
+ac1.requestLoan(1000); //loan approved
+//Account {owner: 'jonas', currency: 'EUR', pin: 1111, movements: Array(3), locale: 'en-US'}
+console.log(ac1);
+//console.log(ac1.pin); //1111
+//Account {owner: 'jonas', currency: 'EUR', pin: 1111, movements: Array(2), locale: 'en-US'}
+//ENCAPSULATION: means basically to keep some properties and methods private inside the class so that they
+//are not accessible from outside of the class, then the rest of the methods are basically exposed as a
+//public interface, which we also called api so this is essentail to do in anything more than a toy application
+// now they are 2 big reasons why we need encapsulation and data privacy
+
+//1)to prevent code from outside of a class to accidentally manipulate  or data inside a class
+//2) when we expose only a small interface so a small api consisting only a few public methods then we can
+//change all other internal methods with more confidence, because in this case we can be sure that external
+//code does not rely on these private methods and so therfore our code will not break when we do internal
+//chnages, so that what encapsulation and adat privacy are, however js classes actually do not yet support
+//real data privacy and encapsulation
+
+//there is a proposal to dd truly private class fields and methods to the language, the 1st to be protected
+//is movements, so the movements are ission critical data and so here we will protect this data so that
+//no one can accidentally manipulate it, and for now all we do is to add _ infront of the property name
+//now we need to go ahead and change it everywhere, this does not actually make the property truly private
+//because this is just a convention, so its something that developers agree to use, but since this is not
+//truely private we call this protected, and so now if we wanted to get movements outside, we could ofcourse
+//still do this
+//ac1._movements.push(250);
+console.log(ac1); //the data here is still accessible if we use this underscore outside as well, but you
+//will know that it is wrong
+
+//now if we still wnated to give access to the movements array from outside then we would have to implement
+//a public method for that
+console.log(ac1.getMovements()); //(3) [250, -140, 1000]
+//this is the correct way to get movemets, everyone still can access the movements but that cannot ovveride
+//them, so they cannot set the movements, we can also protect the pin
+//-----------------------------------------------------------------------------
+//224: ENCAPSULATION:PRIVATE CLASS FIELDS AND METHODS:
+//Truly private class and methods are actually part of a bigger proposal for improving and changing js
+//classes which is simply called class fields:
+
+//Class field proposal is currently at stage 3, and so right now it is not yet part of the js language, howver
+//being at stage 3 means its vey likely that at some point it will move forward to stage 4 and then it will
+//actually become part of js
+
+//WHY IS THIS PROPOSAL CATUALLY CALLED CLASS FIELDS?
+//in traditional oop like java,c++ properties are usually called fields, so with this means is that with
+//this new proposal . js is moving away from the idea that classes are just syntactic sugar of constructor fn
+//because with this new class features classes actually start to have abilities that we did'nt previoulsy
+//have wioth constructor fn's
+
+//in this proposal there 4 different kinds of fields and methods
+//1)PUBLIC FIELDS:
+//we can think of a field as a property that will be on all instances, so that why we can
+//also call this a public instance field, in our case it should be locale and movements, bacuase these are
+//basically 2 props that are gonna be on all obj's that we create with this class, because we do not
+//pass any values here, so into the construtor and so this array and this lang they will always be set
+//for all thge instances, and so lets now add them as public fields, we have to wrire
+//locale = navigator.language;,
+//this looks like a var here, but we dont have to declare it using let or
+//const, so this how we simple define a public field, and for movements we still called _movements and setting
+//it to empty array, these public fields here are gionna be present on all the instances that we are creating
+//through this class, so they are not on the prototype, all the methods that we add they will be always
+//added to the prototype, but gain the feilds here, thye are on the instances, they are also refrencable
+//with this keyword
+
+//2)PRIBATE FEILDS: with private fields now we can make it so that properties are truly not accessible
+//from the outside, now making movemetns array private we remove the _ and add # this is the syntax that
+//makes a field private, now if we access the account we get an error, the reason for that is the prop
+//is now really called #movements, so we need to change it everywhere, now it works, now if we want to try
+//to read ac1.movements we will get an error
+//console.log(ac1.#movements); so private feild mpvements must be declared in an enclosing class, so basically
+//js thinks thta im trying to implement this private class feild here, infact we caanot access this var
+//outside, and ofcourse the movement prop from before does not, no longer exsit
+
+//only google chrome supports this private class feilds, the movements are now truly private, the next to
+//be private is pin, but this time it is diff, because now we are actually setting the pin based on the i/p
+//value to the constructor, however we cannot define a feild in the constructor, so the feilds really have to
+//be out here, outside of any method, so what we have to do is to create the feild out private feild with
+//#pin and dont set it to anything, this is essentailly creating like empty var, so in the beginning this
+//will be set to undefined and then in constructor we can redefine the value, these clss feilds are like
+//any other prop later down we can then access it on the this keyword and set it to the value that we received
+//now the pin is now private field and when we try to access it we will no longer be able to do that
+//console.log(ac1.#pin); these are available on all instances but not on prototypes
+
+//3)PUBLIC METHODS: so all the methods that we are using are indeed public methods
+//4)PRIVATE METHODS:these are very useful to hide the implementation details from the outside, lets make
+//approvalLoan private but right no browser full supports this, it no longer works on a prototype, but now
+//its instaed on the instance
+
+//besides these 4 we also have static feild methods, these static methods will not be available on all the
+//instances but only on the class
+Account.helper(); //helper
+
+//-----------------------------------------------------------------------------
+//225: CHAINING METHODS:
+/*we can implement bsame ability of chaining methods in the  methods of the class
+//all we have to do is to return the obj itself at the end opf the method that we want to be chainable
+//Chaining
+ac1.deposit(300).deposit(20).withdrawal(60).requestLoan(25000).withdrawal(4000); //right now this dont work
+//ac1.deposit(300) will work but it will return nothing, we actually want to call deposit on account so
+//the reasult of this ac1.deposit(300) should be an account so in the method return this because return is
+//the current obj, returning this will essentially make tyhe method chainable
+console.log(ac1.getMovements()); //(8) [250, -140, 1000, 300, 20, -60, 25000, -4000]
+*/
+
+//-----------------------------------------------------------------------------
+//226: ES6 CLASSES SUMMARY:
+//EXTENDS: will automatically set up the prototype chain for us
+//PUBLIC FEILD:is very similar to just a prop that we define in a constructor, so it is available on all
+//very obj, so on any instance craeted by this class
+//PRIVATE FEILDS:almost same a public feilds, but they are not accessible outside if the class, this is
+//perfect from implementing data privacy and encapsulation
+//STATIC PUBLIC FEILDS: thses are feilds or like props that rea available only on the class, just like
+//static methods we use the static keyword to make any feild static
+//CONSTRUCTOR:it is automatically called by the new operator whenever we create a new instance of the class
+//so basically a new obj, this constrctor method is mandatory in any regular class, bit it might be omitted
+//in a child class if we want it to have the exact same number and the exact same name of parameters
+//then insdide of a constructor there is the call to the parent class, and so that is super class, this is
+//necessary where we are using the extends keyword, this needs to happen before the this keyword in the
+//constructor
+
+//INSTANCE PROPERTY:just like public fields the prop is also available on ecah obj created but the diff b/w
+//this one public field is that we set thses instance prop's based on the i/p data of the constructor
+//thse prop are personalized and unique for each of the obj while the fields are usually for something
+//that is common o all the obj's
+
+//GETTER METHOD: we canb get a value out of an obj by simply writing a prop instead of  writing a method
+
+//-----------------------------------------------------------------------------
+//227: CODING CHALLENGE 4:
+//-----------------------------------------------------------------------------
+//212: CODING CHALLENGE 1:
+/*
+Your tasks:
+1. Use a constructor function to implement a 'Car'. A car has a 'make' and a
+'speed' property. The 'speed' property is the current speed of the car in
+km/h
+2. Implement an 'accelerate' method that will increase the car's speed by 10,
+and log the new speed to the console
+3. Implement a 'brake' method that will decrease the car's speed by 5, and log
+the new speed to the console
+4. Create 2 'Car' objects and experiment with calling 'accelerate' and
+'brake' multiple times on each of them
+Test data:
+§ Data car 1: 'BMW' going at 120 km/h
+§ Data car 2: 'Mercedes' going at 95 km/h
+GOOD LUCK 😀
+
+const Car = function (make, speed) {
+  this.speed = speed;
+  this.make = make;
+};
+const bmw = new Car('BMW', 120);
+const mercedes = new Car('Mercedes', 95);
+console.log(bmw, mercedes);
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(this.speed);
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(this.speed);
+};
+bmw.accelerate(); ////130
+bmw.brake();
+mercedes.accelerate();
+mercedes.brake();
+*/
+
+/*
+//-----------------------------------------------------------------------------
+//217 CODING CHALLANGE 2:
+Your tasks:
+1. Re-create Challenge #1, but this time using an ES6 class (call it 'CarCl')
+2. Add a getter called 'speedUS' which returns the current speed in mi/h (divide
+by 1.6)
+3. Add a setter called 'speedUS' which sets the current speed in mi/h (but
+converts it to km/h before storing the value, by multiplying the input by 1.6)
+4. Create a new car and experiment with the 'accelerate' and 'brake'
+methods, and with the getter and setter.
+Test data:
+§ Data car 1: 'Ford' going at 120 km/h
+
+class Carcl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(this.speed);
+  }
+  break() {
+    this.speed -= 5;
+    console.log(this.speed);
+  }
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+const ford = new Carcl('Ford', 120);
+console.log(ford);
+//Carcl {make: 'Ford', speed: 120}
+ford.accelerate(); //130
+ford.accelerate(); //140
+ford.break(); //135
+ford.speedUS = 50;
+console.log(ford); //Carcl {make: 'Ford', speed: 80}
+
+
+//-----------------------------------------------------------------------------
+//219: CODING CHALLENGE 3:
+Your tasks:
+1. Use a constructor function to implement an Electric Car (called 'EV') as a child
+"class" of 'Car'. Besides a make and current speed, the 'EV' also has the
+current battery charge in % ('charge' property)
+2. Implement a 'chargeBattery' method which takes an argument
+'chargeTo' and sets the battery charge to 'chargeTo'
+3. Implement an 'accelerate' method that will increase the car's speed by 20,
+and decrease the charge by 1%. Then log a message like this: 'Tesla going at 140
+km/h, with a charge of 22%'
+4. Create an electric car object and experiment with calling 'accelerate',
+'brake' and 'chargeBattery' (charge to 90%). Notice what happens when
+you 'accelerate'! Hint: Review the definiton of polymorphism 😉
+Test data:
+§ Data car 1: 'Tesla' going at 120 km/h, with a charge of 23%
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(this.speed);
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(this.speed);
+};
+
+const EV = function (make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+};
+
+EV.prototype = Object.create(Car.prototype);
+
+EV.prototype.chargeBattery = function (chargeTo) {
+  this.charge = chargeTo;
+};
+
+EV.prototype.accelerate = function () {
+  this.speed += 20;
+  this.charge--;
+  console.log(
+    `${this.make} going at ${this.speed} km/h, with a charge of ${this.charge}`
+  );
+};
+
+const tesla = new EV('TESLA', 120, 23);
+console.log(tesla);
+tesla.chargeBattery(90);
+tesla.accelerate();
+console.log(tesla);
+
+*/
+
+//-----------------------------------------------------------------------------
+//227: CODING CHALLENGE 4:
+/*
+Coding Challenge #4
+Your tasks:
+1. Re-create Challenge #3, but this time using ES6 classes: create an 'EVCl'
+child class of the 'CarCl' class
+2. Make the 'charge' property private
+3. Implement the ability to chain the 'accelerate' and 'chargeBattery'
+methods of this class, and also update the 'brake' method in the 'CarCl'
+class. Then experiment with chaining!
+Test data:
+§ Data car 1: 'Rivian' going at 120 km/h, with a charge of 23%
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(this.speed);
+  }
+  break() {
+    this.speed -= 5;
+    console.log(this.speed);
+    return this;
+  }
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} going at ${this.speed} km/h, with a charge of ${
+        this.#charge
+      }`
+    );
+    return this;
+  }
+}
+
+const rivian = new EVCl('Rivian', 120, 23);
+console.log(rivian);
+//console.log(rivian.#charge);
+rivian
+  .accelerate()
+  .accelerate()
+  .accelerate()
+  .break()
+  .chargeBattery(50)
+  .accelerate();
+
+
+
+*/
+
+
+/*
+///////////////////////////////////////
+//----------SECTION 16 AYSYNCHRONOUS JS: PROMISES, ASYNC,/AWAIT AND AJAX-----------
+//246: ASYNCHRONOUS JS, AJAX, APIS:
+//now to understand  what asynchronous js code actually is , we 1st need to understand what synchronous
+//code is, so most of the code that we've been writing so far n the course has been synchronous code
+
+//SYNCRONOUS:simply means that the code is executed line by line, in the exact order of execution that we
+//define in our code, just like in this small ex
+// const p = document.querySelector('.p');
+// p.textContent = 'my name is jonas';
+// alert('text set');
+// p.style.color = 'red';
+
+//so as the 1st line of code is reached in the execution, it is simply executed in the execution of thread
+//execution thread is a part of execution context, which does actually execute the code in the computers
+//processor, the next line of code is executed and the next one, all in sequence, so each line of code
+//always waits for the previous line to finish execution
+
+//now this can create problems when one line of code takes a long time to run, for ex n this current line
+//of code we have an alert statement, which created this alert window now as we've experienced in the past
+//this alert window will block the code execution, so nothing will happen on the page until we click that
+//ok button and only then the code can continue executing, and so the alert statement is a perfect ex
+//of a long running operation, which blicks execution of the code, so again only after we click ok, the
+//window disappears and the next line can run, this is the problrm with the syncroinous code, now most of
+//the time synchronous code is fine and makes perfect sense,
+
+//but imagine that execution would have to wait for ex 5sec timer to finish, that wejust be terrible, bcoz
+//meanwhile nothing on the page would work during these 5 sec, that is where asynchronous code comes into
+//play, so this ex conatins the 5sec timer
+// const p = document.querySelector('.p');
+// setTimeout(function () {
+//   p.textContent = 'my name is jonas';
+// }, 5000);
+// p.style.color = 'red';
+
+//1st line of code is still synchronous here, and we alsp moved to the 2nd line in a synchronous way, but
+//here we encountered the setTimeout() fn, which will basically start a timer in an asynchronous way, so this
+//means thta the timer will essentailly run in the bg withuot preventing the main code from executing, we
+//also register a callback fn, which will not be executed now, but only after the timer has finished running
+//and we have actually done this many times, now this callback fn is asynchronous js, and it is asynchronous
+//becoz it's only going to be executed after a task that is running in the bg finishes execution, in this
+//case it is the timer, so this callback that just talked about is registered, and then we immediately move
+//on to the next line, so the main code is not being blocked, and execution does not wait for the asynchronous
+//timer to finish its work, that is the big diff b/w synchronous and asynchronous
+
+//sp previoulsy we had to wait for the user to click on the alert window to continue execution and again
+//that is becoz alert is blocking synchronous code, but now with this timer, the callback is actually
+//asynchrnous, so it's only gonna be executed after the timer has finished, and so therefore we say, that
+//it's non-blocking because in the mean time the rest of the code can keep running normally
+
+//now when the timer finally finishes after 5 sec, the callback fn will finally be executed as well,we can
+//see that this callback runs after all the other code, even though in the code, it does/nt appear at the end
+//and so basically an action was deferred into the future in order to make the code non-blocking
+
+//ASYNCHRONOUS:
+//asynchronous programming is all abt coordinating the behaviour of our prgm over a certain period of time
+//asynchornous literally means not occurring at the same time
+
+//as we saw in this ex we need a callback to implement this asynchronous behaviour, however that does not
+//mean that callback fn's automatically make code asynchronous
+
+//for ex the array map method accepts a callback fn as well, but that does not make the code asynchronous
+//only certain fn's such as setTimeout() work in an asynchronous way, we just have to know which ones do
+//and which ones dont
+
+// const img = document.querySelector('.dog');
+// img.src = 'dog.jpg';
+// img.addEventListener('load', function () {
+//   img.classList.add('fadeIn');
+// });
+// p.style.width = '300px';
+
+//1st 2 lines run in a synchronous way one after the other, now in this 2nd line we set the src attribute
+//of the img that we selecting in line 1, and this operation is actually synchronous, so setting the src
+//attribute of any img is essentially loading an img in the bg while the rest of the code can keep running
+//imagine that is a huge img, we would'nt want our entire code to wait for the img to load, and that is why
+//setting the src attribute was implemented in js in an asynchronous way, now once the img has finished
+//loading, a load event will automatically be emitted by js, and so we can then listen for that event in
+//order to act on it, listening for the load event is exactly what we do here in the next line
+
+//here we use addEvent and register a callback fn fro the load event, we provide a callback fn that will be
+//executed once the img has been loaded and not right away, becoz again, all this code is non-blocking
+//so instead of blocking, execution moves on right to the next line immediately, then once the img is
+//completely loaded, it;s displayed on the webpage and the load event is emitted, since we are lsitening
+//for the event our callback fn is executed
+
+//we deferred an action into the future making the code asynchronous and non-blocking
+
+//event listeners alone do not make code asynchronous, just like callback fn's alone
+
+//an event listener listening for a click on a btn is not doing any work in the bg, its simply waiting
+//for a click to happen, but it is not doing anything, so there is no asynchronous behaviour involved at all
+
+//what makes this img code asynchronous is simply the fact that the img is loading asynchronously in the
+//bg but not the fact that we are listening for the load event to happen
+
+//asynchronous behvaiour of a task like running a timer or loading an img and there are more ex of asynchronous
+//behvaiour in js like the geolocation api or ajax calls
+
+//AJAX:calls are probably the most imp usecase of js asynchronous behaviour
+
+////AJAX
+//WHAT ARE AJAX CALLS:so AJAX stands for asynchronous javascipt and XML, basically it allows us to
+//communicate with remote web servers in an asynchronous way, in practice we make AJAX calls in our code
+//inorder to request some data from a web server dynamically, so without reloading the page, so that we can
+//use that data in our application dynamically,
+
+//HOW AJAX WORKS?
+//so lets say we have our js application running in the browser, which is also called the client, and we want
+//the application to get some data from a web server. and lets say the data about countries, so with AJAX
+//we can do an HTTP request to the server, which has this data, and the server will then set back response
+//containing that data that we requested, this back and forth b/w client and server all happens aysnchronously
+//in the bg, and there can even be diff types of requests,
+//TYPES OF REQUEST:
+//1)GET: get request to receive data
+//2)POST: to send data to a server
+
+//when we are asking a server to send us some data, this server usually conatins a web API.this API is the
+//one that has the data that we are asking for, so an API is something important
+
+//API (APPLICATION PROGRAMMING INTERFACE): is a peice of software that can be used by another software
+//in order to basically allow applications to talk to each other and exchange information
+
+//in js and web development there are countless API'S
+//DOM API, Geolocation API,
+//these are called API because they are self-contained peice of software that allow other peices of software
+//to interact with them, we can always implement a small and simply API in a class where we make some methods
+//available as a public interface, so again objects made from a class can be seened as self-contained
+//encapusulated pieces of software that other peices of software can interact with them
+
+//THE MOST IMPORANT API  WHEN USING AJAX:
+//the most important api that we are interested in when we use AJAX, and that are APIS that are like to
+//call Online APIS
+
+//ONLINE APIS: an online api is essentially an application running on a web server, which receives requests
+//for data, then retrieves this data from some database and then sends it back to the client, now when
+//building applications in practice, we simply call these online API'S, API , and many people will also
+//call these API'S, Web API's
+
+//we can build our own online api's, but that requires backend dvelopment, so developemnt with servers and
+//databases, now we are interested in using 3rd party API's, so API's that other developers make available
+//for us
+
+//lets now imagine that you are building a travelling app and you have a database with diff destinations
+//and tours that you are offering, so on your own server, you can build your own api that can receive requests
+//from your front end application in js and send back the results, so that would be your own API hosted on
+//your own server, but that alone would probably not enough to build a complete application, and so you
+//could also use 3rd part API's, and there are really API's for everything, so in our ex, travel application
+//you could use an API to get whether data in your destinations, data abt the destination countries themselves
+//data abt flights, abt curreny consversions and you could even use API's to send Emails or text msgs or
+//embed google maps into your applications
+
+//we can even say that API's is what made the modern world web as you know it
+
+//API DATA FORMATS:
+//so AJAX stands for asynchronous javascript and XML, so the X there for XML, XML is a data format, which
+//used to be widely used to transmit data on web, however these days basically no API's uses XML data
+//anymore the term AJAX is just an old name that got very popular back in the day, and so its still used
+//today even thoght we dont use XML anymore,
+
+//so instead most API's these days use the JSON data format, so JSON is the most popular data format today
+//because it is basically just a js obj but converted into a string, and therfore it is very easy to
+//send across the web and also to use in js once the data arrives
+
+//-----------------------------------------------------------------------------
+//247: IMPORTANT: API URL CHANGE
+/*
+The base URL of the API used throughout this section has changed
+
+It's not a big deal, it's really just one small change. Instead of:
+
+https://restcountries.eu/rest/v2/
+
+It's now:
+
+https://restcountries.com/v2/
+
+So whenever we use the Countries API in this section, please just change the URL you see in the videos to this new one.
+
+Happy learning ✌️
+*/
+
+//-----------------------------------------------------------------------------
+//248: OUR FIRST AJAX CALL: XMLHTTP REQUEST:
+//in this lecture we gonna build a nice ui component, which contains data about a certain country, and this
+//data abt countries is gonna come from a 3rd part online api
+
+//in js there are multiple ways of doing AJAX calls, lets starts with XML http request fn, we can do
+//const request = new XMLHttpRequest(); we call this fn then all we need to do for now is to store the result in a new var
+//this is the old school way of doing AJAX in js, next we need a url to which we make the AJAX call
+//we can now say,request.open(), in here we need to pass in the type of request, the type of HTTP request
+//to get data is simple GET and 2nd we need a string containing the url to which the AJAX call should actually
+//be made,
+
+//on github there is a huge repository, public API's, there will tons of public api's that we can use, in
+//that we can use rest countries api it does need any authentication and it uses HTTPS, and when we click
+//it there will be an API end point,
+
+//ENDPOINT: is essentially just another name for the url that we need, we had for all countires and if we want
+//api for certain country we use search by name we are going to use
+//https://restcountries.com/v3.1/name/{name}
+
+//with this we basically opened a request and now we also need to send it by using request.send(), this
+//will now send now send off the request to this url
+
+//now inorder to get the result, we could'nt simply do somthing like this, set some variable to the result
+//data = request.send(), the reason why we cannot do this is because the result is simply not yet there, so
+//this ajax call that we just send off here is being done in the bg, while the rest of the code keeps running
+//and so this is the asynchronous, non-blocking behavior, instead we need to register a callback on the
+//request obj for the load event, we basically sendoff the request, that request then fetches the data in
+//the bg and then once that is done, it will emit the load event, and so using this event listener, we are
+//waiting for that event, and as soon as the data arrives, this callback fn is called then we can log the
+//result, the this keyword inside of this fn is the request, and the response in the property response text
+//this prop is gonna only set once the data has arrived
+
+//now we just need to convert to an actual js object, because what we have right now is JSON
+//JSON is basically just a big string of text by JSON.parse(this.responseText), so indeed we have here an
+//obj with all data about portugal, this is an array containing one object, so we can destructure
+
+//we call this fn and store it into a new variable
+// const request = new XMLHttpRequest();
+//we need a url to which we make the ajax call
+// //with this we opened a request
+// request.open('GET', 'https://restcountries.com/v3.1/name/portugal');
+// //to send request
+// request.send();
+
+// request.addEventListener('load', function () {
+//   console.log(this.responseText);// The data is in json
+//   //converting JSON
+// });
+
+// const request = new XMLHttpRequest();
+// //we need a url to which we make the ajax call
+// //with this we opened a request
+// request.open('GET', 'https://restcountries.com/v3.1/name/india');
+// //to send request
+// request.send();
+
+// request.addEventListener('load', function () {
+//   console.log(this.responseText); // The data is in json
+//   const [data] = JSON.parse(this.responseText);
+//   //so indeed we have here an obj with all data about portugal, so we can destructure, it gives an obj
+//   console.log(data);
+//   //now we can actually build the car component, get from html file replace the data with obj
+//   const html = ` <article class="country">
+//   <img class="country__img" src="${data.flag}" />
+//   <div class="country__data">
+//     <h3 class="country__name">${data.name}</h3>
+//     <h4 class="country__region">${data.region}</h4>
+//     <p class="country__row"><span>👫</span>${(
+//       data.population / 1000000
+//     ).toFixed(1)} people</p>
+//     <p class="country__row"><span>🗣️</span></p>
+//     <p class="country__row"><span>💰</span>CUR</p>
+//   </div>
+// </article>`;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// });
+//for population it is 10 million, so we dont want to display the entire number so lets round it to 10.3
+//something, we can do that by converting this to number, then divide by a million and round that value
+//finally
+
+//for languages it is basically an array, what we want is the 1st el of languages and then the name, and the
+//same with the currencies an insert this into our html page
+
+// //we call this fn and store it into a new variable
+/*
+const getCountryData = function (country) {
+  const request = new XMLHttpRequest();
+  // //we need a url to which we make the ajax call
+  // //with this we opened a request
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  // //to send request
+  request.send();
+
+  request.addEventListener('load', function () {
+    console.log(this.responseText); // The data is in json
+    //converting JSON(json is realyy a big string of text)
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+    //{name: {…}, tld: Array(1), cca2: 'PT', ccn3: '620', cca3: 'PRT', …}
+    //we have an obj with all the data about the portugal, this is an array containing one obj, so we can destructure
+
+    //we can built the card component, lets copy html from index, we can create a template literal and
+    //replace the data
+    const html = ` <article class="country">
+  <img class="country__img" src="${data.flag}" />
+  <div class="country__data">
+    <h3 class="country__name">${data.name}</h3>
+    <h4 class="country__region">${data.region}</h4>
+    <p class="country__row"><span>👫</span>${+(
+      data.population / 1000000
+    ).toFixed(1)} people</p>
+    <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+    <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+  </div>
+</article>`;
+    countriesContainer.insertAdjacentHTML('beforeend', html);
+    countriesContainer.style.opacity = 1;
+  });
+};
+getCountryData('portugal');
+getCountryData('usa');
+getCountryData('india');
+*/
+//for languages it is basically an array, we want the 1st el of the languages and the name
+
+//we can reuse the same code to create an el like this for multiple countries, so we put all of this into
+//a fn, this one will take string as an i/p of a country, so instead of hardcording portugal we can use
+//country that we get as an i/p
+
+//now we can call this fn
+
+//now we have data about 2 countries, now by calling these 2 fn's twice, we will basically have 2 ajax calls
+//happening at the same time, so if we reaload the page here couple of times now then they might appear in
+//diff order, the reason for that is basically that the data arrives at slightly diff time, ecah time that
+//we are loading the page, so infact this realyy shows the non-blocking behaviour in action, so as we call
+//getCountryData('portugal'); with potugal, for the very 1st time , it sends of this request and then js
+//will moves on in the code right away, so it goes right here in the next line getCountryData('usa');, and
+//this ofcourse fires off another ajax call immediately way before the data of the portugal has actually
+//arrived, so gain we will have 2 ajax calls happening at the same time, and so whatever one arrives 1st
+//will then fire the load event 1st, and so the 1st one is to ajax call for the usa, well then the 1st
+//el thta is gonna be printed here will of course, be the one from usa, and only after that the data
+//for portugal arrives, and then this call bcak fn here is called with the data of portugal
+
+//now if we actually wanted these requests to be made in a specific, like predefined order,, then we would
+//basically have to chain the requests, which means to make the 2nd request, only after the 1sr request
+//has finished
+
+//-----------------------------------------------------------------------------
+//249: [OPTIONAL]: HOW WEB WORKS: REQUESTS AND RESPONSES:
+
+//client     ----------------->(request)   web server
+//           <-------------------(response)
+
+//whenever we try to access a web server, the browser which is client, sends a request to the server and the
+//server will then send back a resonse and that response contains the data or the web page that we requested
+
+//REQUEST RESONSE MODEL or CLIENT-SERVER ARCHITECTURE
+//this process works exact same way no matter if we are accessing an entire web page or just some data from
+//a web api, this whole process actually has a name and it is called request response model or client-server
+//architecture
+
+//lets use the ex of the url that we used in last lecture to get our countyr data
+
+//https://restcountries.com/v2/name/${country}
+//now every url gets an HTTP or HTTPS which is for the protocol that we used on this connection, then we have
+//a domain name, which is the restcountries.com and also after slash, we have a so-called (v2) resource that
+//we want to access, now this domain name restcountries.com is actually not the real address of the server
+//that we are trying to access, it is really just a nice name that is easy for us to remember, but what is
+//thta means is that we need a way of kind of converting the domain name to the real address of the server
+
+//and that happens through a so-called D-N-S
+//DNS(DOMAIN NAME SERVER): These are a special kind of servers, so they are basically like the phone books
+//of the internet, so the 1st step that happens when we access any web server is that the browser makes
+//a request to a DNS and this special server will then simply match the web address of the url to the
+//servers real IP address, this all happens through your internet service provider
+
+//the domain is not the real address and that a DNS will convert the domain to the real IP address, and then
+//after the real IP address has been sent back to the browser, we can finally call it
+
+//once we have the real ip address, a tcp socket is established b/w the browser and the server, and so they
+//are now finally connected, and this connection is typically kept alive fro th entire time that it takes
+//to transfer all the files of the website or all data
+
+//WHAT ARE TCP AND IP?
+//TCP: transmission control protocol
+//IP: internet protocol
+
+//they are communication protocols that define exactly how data travels across the web, they are basically
+//the internet's fundamental control systems, because again they are the ones who set the rules about how
+//data moves on the internet
+
+//now its time to finally make our request, and the request that we make is an HTTP request, where HTTP
+//stands for hypertext transfer protocol
+
+//after TCP/IP, HTTP is another communication protocol, a communication protocol is simply a sysytem of rules
+//thta allows us 2 or more parties to communicate
+
+//now in the case of HTTP, it's just a protocol that allows client and webserver to communicate, and thta
+//works by sending requests and resonse messages from client to the server and back, now a request msg
+//looks somthing like this
+
+// GET /rest/v2/alpha/PT HTTP/1.1  -----> start line ->  this contains the HTTP method that is used in
+//the request, and then the request target and then the HTTP version
+//HTTP method + request target + http version
+//so about the http methods there are many available, but the most important ones are GET, for simply
+//requesting data,  POST for sending data and PUT and PATCH, to basically modify data, so you will see that
+
+//HTTP request: to a server is not only for getting data, but we can also send data
+//Request data: This is where the server is told that we want to access the rest/v2/alpha resource, so we had
+//this in the url before and now it is simply sent as the target in the HTTP request, and so then the server
+//can figure out what to do with it, now if the target was empty, so of it was just a slash then we would
+//be accessing the website's route, which is just restcountries.eu in this example
+
+//then the next part of the requests or the request headers: which is just some info that we sent about the
+//equest itself, there are tons of standared different headers, like what browser is used to make the request
+//at what time, the user's language and many more
+// Host: www.google.com
+// user-agent: Mozilla/5.0
+// Accept-Language: en-US
+//<body>
+
+//now finally in the case where we are sending the data to the server, there will also be the request body,
+//and that body will contain the data that we're sending, for ex coming from an HTML FORM,
+//that is the HTTP request
+
+//it is not our developers who manually write these HTTP requests, there is also HTTPS
+
+//DIFFERENCE BETWEEN HTTP AND HTTPS:
+//HTTPS: is encrypted using TLS OR SSL, which are yet some other protocols, but besides that the behind
+//the HTTP requests and responses still applies to HTTPS
+
+//so our request is formed and now it hits the server, which will then be working on it until it has our
+//data or web page eady to send back, and once it is ready, it will send it back using, an HTTP response
+//and the HTTP response message actually looks quite similar to the request, so also with a start line
+//headers nd a body
+
+//now in this case the start line has besides the version also a status code and a message
+//HTTP/1.1 200 ok
+//HTTP VERSION + status code + status message
+//these are used to let the client know whether the request has been successful or failed, for example 200
+//means ok and the status code thta everyone knows is 404, which menas page not found, so that is where this
+//404 code, that everyone already know, comes from, then the respnose headers  are info about the esponse
+//itself, so just like before, and there are ton available and we can also make up our own actually
+//and finally the last part of the reosnse is again the body, which is present in most repsonses, and this
+//body usually contains the JSON data coming back from an API or HTML of the web page that we are requested
+//
+
+//we only just did one request to restcoutires.au and got one response back, thta is how it is going to work
+//when all we do is to access an API, however, if it's a web page that we are acceswsing, then there will be
+//many more requests and responses, and that is because when we do the 1st request, all we get back is just
+//the initial HTML file, that HTML file will then get scanned by the browser for all the assets that it needs
+//in order to build the entire web page like js, css, image files etc.., and then for ecah diff file, there
+//will be a new HTTP request made to the server, so basically this entire back and forth b/w client and server
+//happens for every single file that is included n the web page, however there can be mutilple requests
+//and responses happening at the same time, but the maount is still limited bcoz otherwise the connection
+//would start to slow down, but anyway, when all the files have finaaly arrived, then the web page can be
+//rendered in the browser, according to the HTML, css and js specifications
+
+//now as the final piece of the puzzle, let's talk about tcp/ip
+
+//TCP AND IP are the communication protocols that define how data travels across the web
+//the job of TCP is to break the requests and responses into 1000's of small chunks, called packets before
+//they are sent, once the small packets arrive at their final destination, tcp will reassemble all the
+//packets into the original request or repsonse, this is necessary so that each packet can take a diff
+//route through the internet, because this way the message arrives at the destination as quick as possible
+//which would not be possible if we sent the entire data simply as a big chunk, as a second part
+
+//th job of IP protocol is to actually send and route these packets through the internet, so it ensures
+//that they arrive at the destination they should go, using IP address on each packet
+
+//-----------------------------------------------------------------------------
+//250: WELCOME TO CALLBACK HELL:
+//in last lecture we  did a simple ajax call to fetch data from a country's api, so we created a fn for that
+//and we call the fn mulitple times , multiple ajax calls were made at the same time, so they were basically
+//running in parallel, and we could not control which one finished 1st, in this lecture lets create a
+//sequence of ajax calls, so that the 2nd one runs only after the 1st one has finished, so in the countries
+//property here there is some prop called bordering countries this one has the code ESP which stands for spain
+//, what we will do now is after the 1st ajax call is completed we will get this border, and then based on
+//this code, we will also render the neighbouring country right here besides the original country, and so
+//in this case the 2nd ajax call really depends on the 1st one, because the data abt the neighbouring
+//counties,is ofcourse a result of the 1st call so without the 1st call, we would'nt even know which data
+//to fetch in the 2nd call, and so what we need to implement is a sequence of ajax call
+/*
+const renderCountry = function (data, className = '') {
+  const html = ` <article class="country ${className}">
+  <img class="country__img" src="${data.flag}" />
+  <div class="country__data">
+    <h3 class="country__name">${data.name}</h3>
+    <h4 class="country__region">${data.region}</h4>
+    <p class="country__row"><span>👫</span>${+(
+      data.population / 1000000
+    ).toFixed(1)} people</p>
+    <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+    <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+  </div>
+</article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const getCountryAndNeighbour = function (country) {
+  //ajax call country 1
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+
+    //render country 1
+    renderCountry(data);
+
+    //lets get the neoghbour country(2)
+    //take the 1st el, there also countries which has no neighbours at all
+    //so islands basically so for these cases, lets simply make sure we dont run any mistakes, so return
+    //immediately
+
+    const neighbour = data.borders;
+    if (!neighbour) return;
+
+    //ajax call country (2), in 2nd call we want neighbours, but there is one particularity because in the
+    //border, the country doesnt come with the name of the country, but with this code, by using the api
+    //we can also search by code, so all we have to change here is name to alpha
+
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+    request2.send();
+
+    //we have a callback inside another one
+    request2.addEventListener('load', function () {
+      const data2 = JSON.parse(this.responseText);
+      //console.log(data2);
+      //the response of this api call is no longer an array, when we serach for a code, and so countyr codes
+      //are unique, so therefore they can always just be one result
+      renderCountry(data2, 'neighbour');
+    });
+  });
+};
+getCountryAndNeighbour('portugal');
+
+//we created a special class, for the neighbouring country so that it appears littel smaller, so when it is
+//a neighbour we need to attach some class to the country and by defualt we set it to nothing
+
+//here we have nested callbacks
+
+//CALLBACK HELL: is when we have a lot of nested callbacks inorder to execute asynchornous tasks in sequence
+//this happens for all asynchronous tasks, which are handled by callbacks and just ajax calls
+
+// setTimeout(() => {
+//   console.log('1 second passed');
+//   setTimeout(() => {
+//     console.log('2 seconds passed');
+//     setTimeout(() => {
+//       console.log('3 seconds passed');
+//     }),
+//       1000;
+//   }),
+//     1000;
+// }),
+//   1000;
+*/
+//-----------------------------------------------------------------------------
+//251: PROMISES AND THE FETCH API:
+//We can escape callback hell from promises
+
+//we can now replace the old XMLHTTP request fn with the modern way of making ajax calls and that is by using
+//the fetch API
+
+// const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v2/name/${country}`);
+//   request.send();
+
+//now all we need to do is to call fetch and then with our url all that we need to do now is to store it
+//in the variable
+//const request = fetch('https://restcountries.com/v2/name/portugal');
+//now there actually one more options that we can specify here in the fetch fn, but to make a simple get
+//request like this one all we really need to pass in the url
+//console.log(request); //Promise {<pending>}
+//fetch fn immediately returned a promise here, so as soon as we started request, we stored the result of
+//that into a request variable, and then as we logged it , we immediately got the promise
+
+//PROMISE: it is an obj that is used basically as a place holder for the future result of an asunchronous
+//operation
+
+//we can also say that a promise is like a container for an asynchronous delivered value
+
+//or promise is a container for a future value
+//a conatiner a plcaholder for a future value, and the perfect ex of a future value is the response coming
+//from an ajax call, so when we start an ajax call, there is no value yet, but we know that there will be
+//some value in the future, and so we can use a promise to handle this future value
+
+//ADVANTAGES OF PROMISES:
+//1)by using promises  we no longer need to rely on events and callback fn's to handle synchronous results
+//events and callback fn's can sometimes cause unpredectable results
+//2)with promises we can chain promises for a sequence of asynchronous operations instead of nesting, with this
+//we can finally escape the callback hell, promises are es6 feature
+
+//THE PROMISES LIFE CYCLE:
+//now since promises work with asynchronous operations, they are time sensitive, so they change over time
+//nd so promises can be in diff states, and this is what we call the life cycle of a promise
+
+//so in the very beginning, we say that the promise is pending, and this is before any value resulting
+//from the asynchronous task is available, now duting this time, the asynchronous task is still doing its
+//work in the bg, then when the task finally finishes, we say that the promise is settled and there are 2
+//diff types of settled promises and that is fulfilled promise and rejected promises
+
+//FULLFILLED PROMISE:is a promise that has successfully resulted in a value just as we expect, for ex when
+//we use the promise to fetch data from an api, a fulfilled promise successfully gets thta data and its now
+//available to being used
+
+//REJECTED PROMISE: there has been an error during the asynchronous task, in the ex of fetching data from
+//an api, an error would be for ex, when the user is offline and cant connect to the api server
+
+//a promise is only a settled one and so from there the state will remain unchanged forever so the promise
+//as either fulfilled  or rejected, but it's impossible to change the state
+
+//these diff states are relavant and useful when we use a promise to get a result, which is called to consume
+//a promise, so we consume a promise when we have already a promise, for ex the promise that was returned
+//from the fetch fn, but inorder for a promise to exist in the 1st place it must 1st be built, so it must
+//be created in the case of fetch api its the fetch fn that build the promise and returns it for us to consume
+//so this case we dont have to build the promise ourselves in order to consume it now most of the time we
+//will actually just consumen promises, which is also easier and more useful part
+
+//-----------------------------------------------------------------------------
+//252: CONSMING PROMISES:
+/*
+//in this case we will consume a promise that was returned by the fetch fn, so lets
+//now implement the get country data fn by using the promise
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   //fetch(`https://restcountries.com/v2/name/${country}`);
+//   //calling the fetch fn like this will immediately returns a promise so as soon as we start the request
+//   //in the beginning this promise is ofcourse still pending because the asynchronous task of getting the data
+//   //is still running in the bg, now ofcourse at a certain point the promise will then be settled and either
+//   //in a fulfilled or in a rejected state, but for now lets assume success, so assme that promise will be
+//   //fulfilled and that we have a value available to work with, and so to handle this flfilled state,we can
+//   //use the then method thta is available on all promises, so again, this here will return a promise, and
+//   //on all promises we can call the then method, now into the then method we need to pass a callback fn
+//   //that we want to be excuted  as soon as the promise is fulfilled, so as soon as the result is available
+//   //so a fn and then this fn will actually receive one argument once its called by the js and that argument
+//   //is the resulting value of the fullfilled promise lets call it a response here bcoz this is the reponse
+//   //of an ajax call in this case, this is how we actually handle a fulfilled promise
+//   fetch(`https://restcountries.com/v2/name/${country}`).then();
+// };
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(function (response) {
+      console.log(response);
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    });
+};
+getCountryData('portugal');
+//Response {type: 'cors', url: 'https://restcountries.com/v2/name/portugal', redirected: false, status: 200, ok: true, …}
+//now what we are really interested is the data itself so the data will be there in the body, now as we see
+//the body is basically this readable stream, now actually we cannot yet really look at the data here, so
+//in order tobe able to actually read  this data from the body, we need to call the JSON method on the repsonse
+//so JSON is a method that is available on all repsonses of the fetch method //response.json();
+//so again this json method here is a method that is available on all the responses obj's that is coming
+//from the fetch fn, so all of the resolved values, and indeed this reponse here is infact a resolved value
+//therefore thye json method is attached to it, now the pblm here is thta json fn itself , is actually
+//also n asynchronous fn, and so what that means is that it will also return a new promise, what we actually
+//need to do is to return the promise and we will need to handle that promise as well, and so the way to do
+//that is to then call another then right here
+
+//fetch fn here will return a promise and then we handled that promise using the then method, but then to
+//actually read the data from the response, we need to call the json method on that response obj, now this 
+//itself ill also return a promise, and so if we then turn that promise from this method then basically
+//all of this becomes a new promise itself, and so since this is a promise  we can then agai, call the then
+//method on that, and so then again we have a callback fn and this time we get access to the data, because the
+//resolved value of this promise here is going to be the data itself, so basically the data that we are looking
+//for, 
+*/
+/*
+const renderCountry = function (data, className = '') {
+  const html = ` <article class="country ${className}">
+    <img class="country__img" src="${data.flag}" />
+    <div class="country__data">
+      <h3 class="country__name">${data.name}</h3>
+      <h4 class="country__region">${data.region}</h4>
+      <p class="country__row"><span>👫</span>${+(
+        data.population / 1000000
+      ).toFixed(1)} people</p>
+      <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+      <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+    </div>
+  </article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const getCountryAndNeighbour = function (country) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    renderCountry(data);
+    console.log(data);
+    const [neighbour] = data.borders;
+    if (!neighbour) return;
+
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+    request2.send();
+
+    request2.addEventListener('load', function () {
+      const data2 = JSON.parse(this.responseText);
+      renderCountry(data2, 'neighbour');
+    });
+  });
+};
+//getCountryAndNeighbour('portugal');
+//getCountryAndNeighbour('usa');
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+// getCountryData('portugal');
+
+// const request = fetch('https://restcountries.com/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+// getCountryData('portugal');
+*/
+//now all we have to do is to render country
+//this fetches something and then we get a response which will be transformed to json, and then we take thta
+//data and render the country to the DOM
+
+//-----------------------------------------------------------------------------
+//253: CHAINING PROMISES:
+//how to chain promises in order to also render the neighbouring country of the initial country, we already
+//have a small chain of promises becoz of json fn, and here these 2 then's called in sequence and are basically
+//already a small chain,
+
+//we 1st get data about the country, but then we also want to get the data about the neighbouring country
+//and so again the 2nd ajax call depends on the data from the 1st call, and so they need to be done in
+//sequence, the 2nd ajax needs to be happed in the then handler, so as soon as we get the data, then we need
+//to get the neighbour country and do the ajax call for thta one as well
+/*
+const request = fetch('https://restcountries.com/v2/name/portugal');
+console.log(request);
+
+const getCountryData = function (country) {
+  //country 1
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(function (data) {
+      console.log(data);
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) return;
+      //country2
+      return fetch(`https://restcountries.com/v2/aplha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
+};
+getCountryData('portugal');
+*/
+
+//what we need to do now is return this new promise for country 2 fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+//because then whwn we do that, we will be able to chain a new then method on the result of this then method
+//the then method always returns a promise, no matter if we are actually return anything or not, bt if we
+//do return a value, then that value will become the fulfillment value of the return promise, by retrning
+//this promise here, then the fulfilled value of the next then method will be the fulfilled value of the
+//previous promise, basically this then method will returns a new promise and here we can then one more time
+//handle the sucess value of that promise, so one more time we are calling it as a response, because here
+//we are dealing with the fulfilled value of a fetch, and so that is the response, and here we need one more
+//time call a json method and here again the fulfilled value of the promise will become that body so the data
+//that is stored in the body and then we can again handle that
+/*
+const request = fetch('https://restcountries.com/v2/name/portugal');
+console.log(request);
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) return;
+      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
+};
+getCountryData('portugal');
+
+//promises really allow us to handle these complex aynchronous operations with as many steps as we want
+//right now we have 4 steps, here instead of the callback hell we have what we call a flat chain of
+//promises
+
+//a pretty common mistake that many beginners make, which is to basically chain this then method directly
+//onto a new nested promise
+const renderCountry = function (data) {
+  const html = ` <article class="country">
+  <img class="country__img" src="${data.flag}" />
+  <div class="country__data">
+    <h3 class="country__name">${data.name}</h3>
+    <h4 class="country__region">${data.region}</h4>
+    <p class="country__row"><span>👫</span>${+(
+      data.population / 1000000
+    ).toFixed(1)} people</p>
+    <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+    <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+  </div>
+</article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+const getCountryData = function (country) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    //console.log(this.responseText);
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+    renderCountry(data);
+    const neighbour = data.border;
+    if (!neighbour) return;
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+    request2.send();
+
+    request.addEventListener('load', function () {
+      const [data2] = JSON.parse(this.responseText);
+      console.log(data2);
+      renderCountry(data2);
+    });
+  });
+};
+getCountryData('portugal');
+getCountryData('usa');
+
+*/
 /*
 //----------SECTION 19-----------=====
 
