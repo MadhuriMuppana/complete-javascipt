@@ -7547,6 +7547,16 @@ rivian
 
 */
 
+///////////////////////////////////////
+//----------SECTION 15 MAPTY APP: OOP, GEOLOCATION, EXTERNAL LIBRARIES-----------
+//228: SECTION INTRO
+
+//229: SECTION ROADMAP:
+
+//230: PROJECT OVERVIEW:
+
+//231: HOW TO PLAN A WEB PROJECT:
+
 /*
 ///////////////////////////////////////
 //----------SECTION 16 AYSYNCHRONOUS JS: PROMISES, ASYNC,/AWAIT AND AJAX-----------
@@ -9274,7 +9284,6 @@ Promise.resolve('abc').then(x => console.log(x));
 Promise.reject(new Error('problem')).catch(x => console.error(x));
 */
 
-
 //----------SECTION 19-----------=====
 /*
 
@@ -9310,7 +9319,7 @@ ravisankars-mbp:complete-javascript-course-master ravisankaruppu$ git config --g
 //code back from NPM, it is not part of our original source code, and so therefore we dont need it in git
 //repository, same is true for dist folder, this folder only contains code that was built from our source
 //code,usually in repository we only want like the original source code, and evertything that is necessary
-//in order to basically GIcompile our final project, same with , .parcel-cache, if we are using mac then we
+//in order to basically compile our final project, same with , .parcel-cache, if we are using mac then we
 //should add .DS_Store
 
 //run a command git status(this shows all of the files here are untracked files), and we can also see that we are
