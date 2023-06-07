@@ -1772,3 +1772,68 @@ Promise.reject(new Error('problem')).catch(x => console.error(x));
 
 //-----------------------------------------------------------------------------
 //260: PROMISFIYING THE GEOLOCATION:
+//in last lecture we use navigator.geolocation.getCurrentPosition(); and this fn here accepts 2 callbacks
+//where the 1st is for the success and the 2nd id for the error, for the 1st callback fn actually gets
+//access to the poition object, and the 2nd callback with error, incase thta the user does not allow the
+//page to get access to the current location
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+// console.log('getting position');
+
+//now js will ask us for permission here and when we allow, then at some point when js actually figures
+//out the location, then we get that data back, this is actually a asynchronous behaviour, so the code is
+//not blocked
+
+//the fn here basically offloaded its work to the bg, so to the web api environment in the browser and then
+//immediately it moved on right to the next line, this is very clearly a callback based api, this is another
+//great opportunity to promisify a callback based api, to a promise based api
+
+//lets create a fn, we dont need to pass anything and we are going to return a new promise, which we then
+//can handle later on, here we pass in the executor fn, which gets access to the resolve fn and the reject
+//fn
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(
+//       position => resolve(position),
+//       err => reject(err)
+//     );
+//   });
+// };
+
+// position => console.log(position),
+// err => console.error(err)
+//in ecah of these callback fn's success callback fn it receives the position, and so when we have the
+//success, we want to resolve the promise, so we want to mark it as fulfilled, and so therfore we call the
+//result fn and we pass in that position obj becase that is actually the fulfilled value that we want to
+//get from this promise incase that is successful, and we do same for the reject
+
+//if this fn here automatically calls these callback fn's here, and if it also automatically passes in the
+//position, then we can simply do this
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(
+//       position => resolve(position),
+//       err => reject(err)
+//     );
+//   });
+// };
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+//this is exactly same as before, before we specified the callback manually, but all we did was to take
+//position and pass it then resolve, bt here that now happens automatically, so now resolve itself is the
+//callback fn, which will get called with the position
+
+//now we can handle the result
+getPosition().then(pos => console.log(pos));
+//the promise was marked as successful y the resolve fn and so therefore then here, this \call back was
+//called by then
+
+//we just promisified the geolocatio api to a promise based api now
