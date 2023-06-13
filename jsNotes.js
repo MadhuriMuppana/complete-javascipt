@@ -12097,7 +12097,7 @@ loadAll(['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']);
 /*
 
 //install git in git-scm
-//GIT: VERSION CONTROL: it is a software that runs on our computer and you can basically use GIT to save
+//GIT: VERSION CONTROL: it is a software that runs o our computer and you can basically use GIT to save
 snapshots of our code over time, and then if you need you can go back in time, like to older versions of
 //your code, if you need to recover some mistake
 
