@@ -11193,6 +11193,906 @@ Promise.resolve('abc').then(x => console.log(x));
 Promise.reject(new Error('problem')).catch(x => console.error(x));
 */
 
+//-----------------------------------------------------------------------------
+//260: PROMISFIYING THE GEOLOCATION:
+
+//we just promisified the geolocatio api to a promise based api now
+/*
+const renderCountry = function (data, className = '') {
+  const html = `
+  <article class="country ${className}">
+          <img class="country__img" src="${data.flags.png}" />
+          <div class="country__data">
+            <h3 class="country__name">${data.name.common}</h3>
+            <h4 class="country__region">${data.region}</h4>
+            <p class="country__row"><span>👫</span>${+(
+              data.population / 1000000
+            ).toFixed(1)} people</p>
+            <p class="country__row"><span>🗣️</span>${Object.values(
+              data.languages
+            )}</p>
+            <p class="country__row"><span>💰</span>${Object.keys(
+              data.currencies
+            )}</p>
+          </div>
+        </article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+
+// const getCountryAndNeighbour = function (country) {
+//   const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+//   request.send();
+
+//   request.addEventListener('load', function () {
+//     const [data] = JSON.parse(this.responseText);
+//     console.log(data);
+//     renderCountry(data);
+
+//     const [neighbour] = data.borders;
+//     console.log(neighbour);
+
+//     if (!neighbour) return;
+//     const request1 = new XMLHttpRequest();
+//     request1.open('GET', `https://restcountries.com/v3.1/alpha/${neighbour}`);
+//     request1.send();
+
+//     request1.addEventListener('load', function () {
+//       const data1 = JSON.parse(this.responseText);
+//       console.log(data1);
+//       renderCountry(data1[0]);
+//     });
+//   });
+// };
+
+// getCountryAndNeighbour('portugal');
+// getCountryAndNeighbour('usa');
+
+
+// const response = fetch(`https://restcountries.com/v3.1/name/portugal`);
+// console.log(response);
+
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText(`beforeend`, msg);
+  //countriesContainer.style.opacity = 1;
+};
+
+const getJSON = function (url, errorMsg = '') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg}, ${response.status}`);
+    return response.json();
+  });
+};
+const getCountryData = function (country) {
+  getJSON(`https://restcountries.com/v3.1/name/${country}`, 'country not found')
+    .then(function (data) {
+      console.log(data);
+      const countryData = data[0];
+      console.log(countryData);
+      renderCountry(countryData);
+      if (!countryData.borders || countryData.borders.length === 0) {
+        throw new Error('no neighbour found');
+      }
+
+      const neighbour = data[0].borders[0];
+
+      console.log(neighbour);
+
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbour}`,
+        'country not found'
+      );
+    })
+
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.error(`${err}`);
+      renderError(`something went wrong ${err.message}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+
+btn.addEventListener('click', function () {
+  getCountryData('portugal');
+});
+
+//in last lecture we use navigator.geolocation.getCurrentPosition(); and this fn here accepts 2 callbacks
+//where the 1st is for the success and the 2nd id for the error, for the 1st callback fn actually gets
+//access to the poition object, and the 2nd callback with error, incase thta the user does not allow the
+//page to get access to the current location
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+// console.log('getting position');
+
+//now js will ask us for permission here and when we allow, then at some point when js actually figures
+//out the location, then we get that data back, this is actually a asynchronous behaviour, so the code is
+//not blocked
+
+//the fn here basically offloaded its work to the bg, so to the web api environment in the browser and then
+//immediately it moved on right to the next line, this is very clearly a callback based api, this is another
+//great opportunity to promisify a callback based api, to a promise based api
+
+//lets create a fn, we dont need to pass anything and we are going to return a new promise, which we then
+//can handle later on, here we pass in the executor fn, which gets access to the resolve fn and the reject
+//fn
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(
+//       position => resolve(position),
+//       err => reject(err)
+//     );
+//   });
+// };
+
+// position => console.log(position),
+// err => console.error(err)
+//in ecah of these callback fn's success callback fn it receives the position, and so when we have the
+//success, we want to resolve the promise, so we want to mark it as fulfilled, and so therfore we call the
+//result fn and we pass in that position obj becase that is actually the fulfilled value that we want to
+//get from this promise incase that is successful, and we do same for the reject
+
+//if this fn here automatically calls these callback fn's here, and if it also automatically passes in the
+//position, then we can simply do this
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(
+//       position => resolve(position),
+//       err => reject(err)
+//     );
+//   });
+// };
+
+/*
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+//this is exactly same as before, before we specified the callback manually, but all we did was to take
+//position and pass it then resolve, bt here that now happens automatically, so now resolve itself is the
+//callback fn, which will get called with the position
+
+//now we can handle the result
+getPosition().then(pos => console.log(pos));
+//the promise was marked as successfuly the resolve fn and so therefore then here, this \call back was
+//called by then
+*/
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+//getPosition().then(pos => console.log(pos));
+
+//in this ex we passed in lat and lon and then based on thta, we did reverse geocoding which gave us the country
+//that basically these coordinates belong to, and based on that country, we could get all the data about the
+//country and then display it on the page, but now since we have this get positioned fn, we actually no longer
+//need to even pass in these coordinates, and now we are gonna be able to bild a fn that will tell us where we
+//are in the world simply based on geolocation of our device
+
+//we no longer need to pass in coordinates we start with getting the position
+
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+/*
+const renderCountry = function (data, className = '') {
+  const html = `
+  <article class="country ${className}">
+          <img class="country__img" src="${data.flags.png}" />
+          <div class="country__data">
+            <h3 class="country__name">${data.name.common}</h3>
+            <h4 class="country__region">${data.region}</h4>
+            <p class="country__row"><span>👫</span>${+(
+              data.population / 1000000
+            ).toFixed(1)} people</p>
+            <p class="country__row"><span>🗣️</span>${Object.values(
+              data.languages
+            )}</p>
+            <p class="country__row"><span>💰</span>${Object.keys(
+              data.currencies
+            )}</p>
+          </div>
+        </article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      console.log(pos.coords);
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+
+    .then(res => {
+      console.log(res);
+      if (!res.ok) throw new Error(`problem ith geocoding ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.country}`);
+      return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`contry not found ${res.status}`);
+      return res.json();
+    })
+    .then(data => renderCountry(data[0]))
+    .catch(err => console.error(`${err.message}`));
+};
+
+btn.addEventListener('click', whereAmI);
+
+*/
+//-----------------------------------------------------------------------------
+//261: CODING CHALLENGE2:
+/*
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+const imgContainer = document.querySelector('.images');
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+
+    img.addEventListener('error', function () {
+      reject(new Error('image is not found'));
+    });
+  });
+};
+let currentImg;
+createImage('img/img-1.jpg')
+  .then(img => {
+    currentImg = img;
+    console.log('image1 is loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage('img/img-2.jpg');
+  })
+  .then(img => {
+    currentImg = img;
+    console.log('image2 is loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+  })
+  .catch(err => console.error(err));
+*/
+
+//-----------------------------------------------------------------------------
+//262: CONSUMING PROMISES WITH ASYNC/WAIT:
+/*
+//now there is even better and easier way to consume promises, which is called sync, await
+//we start by creating a simple kind of fn which is called Async fn, for now we pass in country, we now make this
+//as a special kind of fn, which is an async fn, we do that by simple adding async in the front of the fn and
+//this fn now is an asynchronous fn, so a fn that will basically keep running in the bg while performing the
+//code that's inside of it, then when this fn is done it automatically returns a promise
+
+//inside a async fn we can have one or more await statements
+
+//AWAIT: in an async
+//fn like this one we can use the await keyword to basically await for the result of this promise
+
+//AWAIT: will stop the code execution at this point of the fn until the promise is fulfilled, and so until the
+//data has been fetched
+
+//here we need a promise, we can use a promise retrned from a fetch fn
+//wait fetch(`https://restcountries.com/v3.1/name/${country}`) again this will return a promise, and in an async
+//fn like this one we can use the await keyword to basically await for the result of this promise
+//AWAIT: will stop the code execution at this point of the fn until the promise is fulfilled, and so until the
+//data has been fetched
+
+//is'nt stopping the code, blocking the execution?
+//stopping execution in an async fn is not a pblm because this fn is running asynchronously in the bg, and so
+//therefore it is not blocking the main thread of exection, so it's not blocking the callstack
+
+//it's a fact that async await makes our code look like regular synchronous code while behinf the scenes
+
+//now as soon as the promise here is resolved then the value of this whole await expression that we have here
+//is going to be the resolved value of the promise, and so we can simply store that into a variable
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+const whereAmI = async function () {
+  //geolocation
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+
+  //reverse Geocoding
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  const dataGeo = await resGeo.json();
+  console.log(dataGeo);
+
+  //country data
+  const res = await fetch(
+    `https://restcountries.com/v3.1/name/${dataGeo.country}`
+  );
+  console.log(res);
+  //we have to get json and this will retrns a new promise, previosly we have to return and then chain another
+  //then handler, bt now this becomes so much easier, we can await this and store it into a varibale
+
+  const data = await res.json();
+  console.log(data);
+  renderCountry(data[0]);
+};
+whereAmI();
+console.log('first');
+
+//async await is simply a syntactic sugar over the then method in promises
+*/
+
+//-----------------------------------------------------------------------------
+//263: ERROR HANDLIONG WITH TRY...CATCH
+/*
+//so with async await we cant use the catch method that we use before, becoz we cant really attach it anywhere
+//so instead we use something called try catch statement,
+
+//TRY CATCH STATEMENT: this is used in regular js. we use it to catch errors in async fn
+
+//we can basically wrap all our code in a try block, and so js will then basically try to execute this code
+//so just as normal code, so lets create a var let y = 1 and const x = 2, my goal was to reassign y, but accidentally
+//reassign x, so that should gives us as error, //Uncaught SyntaxError: Missing catch or finally after try (at script.js:2156:1)
+//after try we can add the cae=tch block, so we have a catch block and this catch block will have access to
+//whatever error occured here in the try block, and we can do something with this error, lets say we simple wants
+//to alert the error
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (err) {
+//   alert(err.message);
+// }
+//TRY CATCH: is used to catch real errors in async fn
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+const whereAmI = async function () {
+  try {
+    const pos = await getPosition();
+    console.log(pos);
+    const { latitude: lat, longitude: lng } = pos.coords;
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if (!resGeo.ok) throw new Error(`problem getting location data`);
+    const dataGeo = await resGeo.json();
+
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    );
+    if (!resGeo.ok) throw new Error(`problem getting location country`);
+    const data = await res.json();
+    renderCountry(data[0]);
+  } catch (err) {
+    console.error(err);
+    renderError(`${err.message}`);
+  }
+};
+whereAmI();
+whereAmI();
+whereAmI();
+//in catch we can now handle any errors
+//for the 1st promise here we d not need to throw an error manually, because in the case that something goes wrong
+//with the geoloaction, we already bilt or promise, so that it automatically rejcts in that case, and so in
+//this case we immedeiately gets an error which will get caught in the catch blk, bt as we already same is
+//not true for the promise coming from the fetch, so that promies only get rejected when the user cas no internet
+//connection, but in case of a 403 error, or a 404 error, the fetch promise does not reject, and so again we do thta
+//manually
+*/
+
+//-----------------------------------------------------------------------------
+//264: RETURING VALUES FROM ASYNC FUNCTIONS:
+/*
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+// const whereAmI = async function () {
+//   try {
+//     //geolocation
+//     const pos = await getPosition();
+//     //console.log(pos);
+//     const { latitude: lat, longitude: lng } = pos.coords;
+//     //reverse geocoding
+//     const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//     if (!resGeo.ok) throw new Error(`problem getting location data`);
+//     const dataGeo = await resGeo.json();
+//     //country data
+//     const res = await fetch(
+//       `https://restcountries.com/v3.1/name/${dataGeo.country}`
+//     );
+//     if (!resGeo.ok) throw new Error(`problem getting location country`);
+//     const data = await res.json();
+//     renderCountry(data[0]);
+//     return `you are in ${dataGeo.city}, ${dataGeo.country}`;
+//   } catch (err) {
+//     console.error(err);
+//     renderError(`${err.message}`);
+
+//     //reject promise returned from async fn
+//     throw err;
+//   }
+// };
+// console.log('1: will get location');
+// (async function () {
+//   try {
+//     const city = await whereAmI();
+//     console.log(`2: ${city}`);
+//   } catch (err) {
+//     console.error(`2: ${err.message}`);
+//   }
+//   console.log('3: finished getting location');
+// });
+// const city = whereAmI();
+// console.log(city);
+// whereAmI()
+//   .then(city => console.log(`2: ${city}`))
+//   .catch(err => console.error(`2: ${err.message}`))
+//   .finally(() => console.log('3: finished getting location'));
+
+// 1: will get location
+// script.js:2241 3: finished getting location
+// script.js:2240 you are in Houston, United States of America
+
+//we get the 1st log tyhen the 2nd log, and ofcourse only after that we get all the logs oming from the async fn
+//that is bcoz there is the async fn that runs in the bg, and so js will immediately moves on toi the next line
+//now, if this was indeed a reglar fn and there would be a console.log in that reglar fn, then ofcourse that would
+//ppera here b/w 1 and 3, but in this this is an async fn and so therfore it rns in the bg until the results are
+//here
+
+//now lets say we wanted to return some data from this async fn, at the end of the fn lets say we wants to return
+//a string based on geocoding data, we retrned a string and let say we want now to get ot here, for now lets
+//pretend this here is a regular fn, and then we would do this b simply defining a var, then there we would
+//store this value, in this case the 2nd thing that was returned is the promise here
+
+//when we 1st started with async/await, async fn always returns a promise, at this point of the code
+//const city = whereAmI(); js has simply no way of knowing yet this string that we want here, becoz the fn is
+//still running, but it is also not blocking the code ot here, and so therfore again at this point, js has no
+//way of knowing what will be returned from this fn, and so therfore all that this fn will return is a promise
+
+//now the value that we retuned from an async fn, so again that is this string here, will become fulfilled
+//value of a promise that is returned by the fn
+
+//so the promise that we see in the 2nd logged in console, is the fulfilled value of that promise is going to
+//be the string, bcoz that is the value that we return from the async fn, since we know that
+///const city = whereAmI(); this will retrns a promise, we alos know how we can actally get the data that we want
+//so all we need to do instead of this here const city = whereAmI(); so this will be our promise here, then just
+//like before we can use then method to get the fulfilled value of the promise
+//whereAmI().then(city => console.log(city));
+//in then handler the argument that we will pass into the callback fn is going to be the result value of the promise
+//
+
+//with this we succefully returned a value from the fn, so if any error occrs in the try block, then this return
+//here will never be reached becaxe the code will immediately jump to the catch blk
+
+//now if we try to introduce an error, here we get an ndefined whereAmI().then(city => console.log(city));
+//so indeed now othing was returned from the fn, bt the log still worked, the console.log(); undefined means
+//the callback fn is still running, that means that the then method was called which inturn mean that this promise
+//here whereAmI().then(city => console.log(city)); was actually fulfilled nd not rejected so even though there
+//was an error in the async fn, the promise that the async fn returns is still fulfilled and not rejected, and
+//infact if we add a catch handler,still we get an error, bt still it is this callback here that is exected
+//thta is why we get 2: undefined and not the catch blk
+
+//even though there was an error in the async fn, the promise that it returns is still flfilled, now if we wanted
+//to fix that, if we want to be able to catch that error here as well then we would have to rethrow that error
+//right here in the try catch (catch blk)
+
+//rethrowing the error means to basically throw the error again so that we can then propagate it down, and so
+//with that we manually reject a promise that was returned from async fn, so here we can now take the error and
+//throw it again
+
+//script.js:2225     GET https://restcountries.com/v3.1/name/undefined 404 (Not Found)
+//script.js:2233 TypeError: Cannot read properties of undefined (reading 'flags')
+// at renderCountry (script.js:1977:49)
+// at whereAmI (script.js:2230:5)
+//script.js:2245 2: Cannot read properties of undefined (reading 'flags')
+
+//now we get the same error as we had here
+//so again it's cannot read property flag of undefined
+
+//and so finally if we wanted to fix thenot the error but the fact that the 3 is printed before 2, we can do thta
+//by simply adding finally, becase finally is always gonna be executed, so no matter what
+
+//if we mixes the philosophy of async/await  with handling promises using then and catch, we are mixing the old
+//and new way of working with  promises, so we should prefer to always use aync fn insated of mix them
+//lets now convert this to async/await
+//whereAmI()
+// .then(city => console.log(`2: ${city}`))
+// .catch(err => console.error(`2: ${err.message}`))
+// .finally(() => console.log('3: finished getting location'));
+//we can do that becase ofcourse we can treat the promise here thta has retrned jst like any other promise, and
+//so ofcourse we are able to handle it using asyn/await, it would be great if we use the await without using
+//the async fn
+
+//IIFE: IMMEDIATELT INVOKED FUNCTION EXPRESSIONS
+// (function () {})();
+
+//we can also create async IIFE
+// (async function () {
+//   try {
+//     const city = await whereAmI();
+//     console.log(`2: ${city}`);
+//   } catch (err) {
+//     console.error(`2: ${err.message}`);
+//   }
+//   console.log('3: finished getting location');
+// });
+//we can simply put the code outside of try catch blk, then it is always gonna executed no matter what
+
+const renderCountry = function (data, className = '') {
+  const html = `
+  <article class="country ${className}">
+          <img class="country__img" src="${data.flags.png}" />
+          <div class="country__data">
+            <h3 class="country__name">${data.name.common}</h3>
+            <h4 class="country__region">${data.region}</h4>
+            <p class="country__row"><span>👫</span>${+(
+              data.population / 1000000
+            ).toFixed(1)} people</p>
+            <p class="country__row"><span>🗣️</span>${Object.values(
+              data.languages
+            )}</p>
+            <p class="country__row"><span>💰</span>${Object.keys(
+              data.currencies
+            )}</p>
+          </div>
+        </article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText(`beforeend`, msg);
+  //countriesContainer.style.opacity = 1;
+};
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+const whereAmI = async function () {
+  try {
+    //geolocation
+    const pos = await getPosition();
+    //console.log(pos);
+    const { latitude: lat, longitude: lng } = pos.coords;
+    //reverse geocoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if (!resGeo.ok) throw new Error(`problem getting location data`);
+    const dataGeo = await resGeo.json();
+    //country data
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    );
+    if (!resGeo.ok) throw new Error(`problem getting location country`);
+    const data = await res.json();
+    renderCountry(data[0]);
+    return `you are in ${dataGeo.city}, ${dataGeo.country}`;
+  } catch (err) {
+    console.error(err);
+    renderError(`${err.message}`);
+
+    //reject promise returned from async fn
+    throw err;
+  }
+};
+console.log('1: will get location');
+(async function () {
+  try {
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (err) {
+    console.error(`2: ${err.message}`);
+  }
+  console.log('3: finished getting location');
+})();
+*/
+
+//-----------------------------------------------------------------------------
+//265:RUNNING PROMISES IN PARALLEL:
+/*
+//Lerts now imagine that we wanted to get some data abt 3 countries at the same time but in which the order
+//that the data arrives does not matter at all, so lets now implement aync fn, and this fn will simply
+//take in 3 contries and it will log the capital cities of these 3 countries as an array
+
+const getJson = function (url, errorMsg = 'something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+    return response.json();
+  });
+};
+
+const get3Countries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJson(`https://restcountries.com/v3.1/name/${c1}`);
+
+    // const [data2] = await getJson(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJson(`https://restcountries.com/v3.1/name/${c3}`);
+    // console.log(data1, data2, data3);
+    // console.log([data1.capital[0], data2.capital[0], data3.capital[0]]);
+    const data = await Promise.all([
+      getJson(`https://restcountries.com/v3.1/name/${c1}`),
+      getJson(`https://restcountries.com/v3.1/name/${c2}`),
+      getJson(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+    console.log(data.map(d => d[0].capital[0]));
+  } catch (err) {
+    console.error(err);
+  }
+};
+get3Countries('portugal', 'canada', 'india');
+
+//what we did in this is to rn the ajax calls one after another even though the result of the 2nd one here
+//does not depedn on 1st one, and reslt of 3rd does not depend on 2nd one, why shold the2nd ajax call should
+//wait for the 1st one
+
+//insead of rnning these promises in sequence we can actually run them in parallel so all at the same time,and
+//then we can save loading time, making thses 3 here load at the same time, for that we use
+
+//Promise.all combinator fn: this is a helper fn on promise constrctor fn, this fn here takes in an array of
+//promises, and it will return a new promise, which will then rn all the promises in the array at the same time
+
+//as this Promise.all retruns a new promise, so a promise that runs all of these promsies at the same time, and
+//then we can handle thta promise
+
+//inorder to return an array we want to loop over the array to get all the capital cities
+
+//if one of the promises rejects then the whole Promise.all actually rejects as well, so we say that Promise.all()
+//short circuits when one promise rejects, so gain becoz one rejected promise is enough for the entire thing
+//to reject as well
+
+//whenever we have a situation in which you need to do multiple async operations at the same time, and operations
+//that dont depend on one another then you shold always run them in parallel, just by using promise.all()
+*/
+
+//-----------------------------------------------------------------------------
+//266: OTHER PROMISE COMBINATORS: RACE, ALLSETTLED ND ANY
+/*
+
+//Promise.race: Just like all other combinators receives an array of promises and it also returns a promise
+//now this promise returned by Promise.race is settled as soon as one of the i/p promises settles, settled simply
+//means that a value is available, but it does'nt matter if the promise got rejected, fulfilled, and so in
+//Promise.race, basically the 1st settled promise wins the race
+(async function () {
+  const res = await Promise.race([
+    getJson(`https://restcountries.com/v3.1/name/italy`),
+    getJson(`https://restcountries.com/v3.1/name/egypt`),
+    getJson(`https://restcountries.com/v3.1/name/mexico`),
+  ]);
+  console.log(res[0]);
+})();
+
+//now these 3 promises will basically race against ecah other, like in a real race, now if the winning promise
+//is then a fulfilled promise, then the fulfillment value of this whole race promise is gonna be the fulfillment
+//value of the winning promise
+
+//in Promise.race we will get only one result and not an array of all the 3, now a promise that gets rejected can
+//actally also wins the race, and so we say that the Promise.race short circuits whenever one of the promises
+//get settled, and so that means no matter flfilled or rejected
+
+// in a real world Promise.race() is actually very usefl tp prevent against never ending promises or also very
+//long running promises
+
+//if a user has a very bad internet connection, then a fetch requests in your app might take a way too long
+//actually be useful, and so we can create a special timeout promise, which automatically rejects after ertain
+//time has passed
+
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error('request took too long'));
+    }, sec * 1000);
+  });
+};
+//after a cetain amont of seconds, after this time has passed we reject the promise
+//now we can simply have a ajax call race against this timeot
+
+Promise.race([
+  getJson(`https://restcountries.com/v3.1/name/tanzania`),
+  timeout(5),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
+
+//lets say we only wats to wait for 1 sec, and so we will have these 2 then race against ecah other, and if the
+//the timeout happens 1st then all of this will be rejected, and basically that will then abort thr fetch
+//thta is happening in getJson()
+
+//the other 2 promise combinators:
+//PROMISE.ALLSETTLED:
+//Promise.allsettled(): it takes in an array of promises and will simply return an array of all the settled promises
+//and so again no matter if the promises got rejected or not, it is similar to Promise.all() in regard that it
+//also returns an array of all the results, but the diff is that Promise.all() will short circuit as soon as one
+//promise rejects, but Promise.allSettled, simply never shortcircuits, so it will simply returns all the results
+//of the promises
+
+Promise.allSettled([
+  Promise.resolve('success'), //this creates the promise that is resolved
+  Promise.reject('Error'),
+  Promise.resolve('another success'),
+]).then(res => console.log(res));
+
+Promise.all([
+  Promise.resolve('success'), //this creates the promise that is resolved
+  Promise.reject('Error'),
+  Promise.resolve('another success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+//Promise.all will short circuit if there is one error, if there is a rejected promise
+
+//PROMISE.ANY:
+//Promise.any(): takes in an array of multiple promises and this one will then retrn the 1st flfilled promise
+//and it will simply ignore rejected promises, Promise.any is very similar to Promise.race with the diff that
+//the rejected promises are ignored, and therfore the result of Pormise.any is always gonna be a fulfilled promise
+
+Promise.any([
+  Promise.resolve('success'), //this creates the promise that is resolved
+  Promise.reject('Error'),
+  Promise.resolve('another success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+*/
+
+//-----------------------------------------------------------------------------
+//267: CODING CHALLENGE 3:
+/*
+
+// const renderCountry = function (data, className = '') {
+//   const html = `
+//     <article class="country ${className}">
+//             <img class="country__img" src="${data.flags.png}" />
+//             <div class="country__data">
+//               <h3 class="country__name">${data.name.common}</h3>
+//               <h4 class="country__region">${data.region}</h4>
+//               <p class="country__row"><span>👫</span>${+(
+//                 data.population / 1000000
+//               ).toFixed(1)} people</p>
+//               <p class="country__row"><span>🗣️</span>${Object.values(
+//                 data.languages
+//               )}</p>
+//               <p class="country__row"><span>💰</span>${Object.keys(
+//                 data.currencies
+//               )}</p>
+//             </div>
+//           </article>`;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// };
+// const whereAmI = function (lat, lng) {
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then(res => {
+//       console.log(res);
+//       return res.json();
+//     })
+//     .then(data => {
+//       console.log(`You are in ${data.city}, ${data.country}`);
+//       return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+//     })
+//     .then(res => {
+//       if (!res.ok) throw new Error(`contry not found ${res.status}`);
+//       return res.json();
+//     })
+//     .then(data => renderCountry(data[0]))
+//     .catch(err => console.log(err));
+// };
+// whereAmI(52.508, 13.381);
+// whereAmI(19.037, 72.873);
+// whereAmI(-33.933, 18.474);
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images');
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+
+    img.addEventListener('error', function () {
+      reject(new Error('image is not found'));
+    });
+  });
+};
+// let currentImg;
+// createImage('img/img-1.jpg')
+//   .then(img => {
+//     currentImg = img;
+//     console.log('image1 is loaded');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage('img/img-2.jpg');
+//   })
+//   .then(img => {
+//     currentImg = img;
+//     console.log('image2 is loaded');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//   })
+//   .catch(err => console.log(err));
+
+const loadNPause = async function () {
+  try {
+    let img = await createImage('img/img-1.jpg');
+    console.log('image1 is loaded');
+    await wait(2);
+    img.style.display = 'none';
+    img = await createImage('img/img-2.jpg');
+    console.log('image2 is loaded');
+    await wait(1);
+    img.style.display = 'none';
+  } catch (err) {
+    console.log(err);
+  }
+};
+//loadNPause();
+
+const loadAll = async function (imgArr) {
+  try {
+    const imgs = imgArr.map(async img => await createImage(img));
+    console.log(imgs);
+    const imgEl = await Promise.all(imgs);
+    console.log(imgEl);
+    imgEl.forEach(img => img.classList.add('parallel'));
+  } catch (err) {}
+};
+loadAll(['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']);
+*/
 //----------SECTION 19-----------=====
 /*
 
@@ -11383,10 +12283,7 @@ const runOnce = function () {
   console.log("this will never run again");
 };
 runOnce();
-//however we can actually run this fn again, at some other point in the code, if we want it to right, this
-//is not what we want to do, we want to execute a fn immediately, and not even having to save it somewhere
-//and so this is how we do that, so we simply right the fn expression itself, so without assigning to any
-//variable, now if we try to run this we will get error for now, so it says fn staements require a fn name
+
 
 (function () {
   console.log("this will never run again");
